@@ -245,7 +245,7 @@ const ProfileAvatar = ({ role, isGrouped }) => {
   const isAssistant = role === 'assistant';
   
   return (
-    <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+    <div className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center ${
       isGrouped ? 'opacity-0' : ''
     } transition-opacity duration-200 ${
       isAssistant 
@@ -253,9 +253,9 @@ const ProfileAvatar = ({ role, isGrouped }) => {
         : 'bg-gradient-to-br from-blue-500 to-cyan-500'
     }`}>
       {isAssistant ? (
-        <FiMessageSquare className="text-white" size={16} />
+        <FiMessageSquare className="text-white" size={18} />
       ) : (
-        <FiUser className="text-white" size={16} />
+        <FiUser className="text-white" size={18} />
       )}
     </div>
   );
@@ -2001,23 +2001,30 @@ function ChatMessage({ message, searchTerm = "", isSearchMode, prevMessage, next
       >
         {/* 사용자 아바타 (왼쪽) */}
         {!isUser && (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center mr-2">
             {!isGrouped && (
-              <span className="message-time text-xs text-gray-400 mb-1">
-                {formatMessageTime(messageTime)}
-              </span>
+              <div className="flex flex-col items-center mb-1">
+                <span className="message-time text-xs text-gray-400 mb-1.5 whitespace-nowrap">
+                  {formatMessageTime(messageTime)}
+                </span>
+                <ProfileAvatar role="assistant" isGrouped={isGrouped} />
+              </div>
             )}
-            <ProfileAvatar role="assistant" isGrouped={isGrouped} />
+            {isGrouped && (
+              <div className="mt-1">
+                <ProfileAvatar role="assistant" isGrouped={isGrouped} />
+              </div>
+            )}
           </div>
         )}
         
         {/* 메시지 말풍선 */}
         <div
-          className={`message-bubble relative ${
+          className={`message-bubble relative mt-6 ${
             isUser
               ? "user-message bg-indigo-600 text-white"
               : "assistant-message bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
-          } ${isGrouped ? "grouped" : ""}`}
+          } ${isGrouped ? "grouped mt-1" : ""}`}
         >
           {/* 메시지 내용 */}
           <div className={`message-content ${showTypeWriter ? "typing" : ""}`}>
@@ -2073,13 +2080,20 @@ function ChatMessage({ message, searchTerm = "", isSearchMode, prevMessage, next
         
         {/* 사용자 아바타 (오른쪽) */}
         {isUser && (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center ml-2">
             {!isGrouped && (
-              <span className="message-time text-xs text-gray-400 mb-1">
-                {formatMessageTime(messageTime)}
-              </span>
+              <div className="flex flex-col items-center mb-1">
+                <span className="message-time text-xs text-gray-400 mb-1.5 whitespace-nowrap">
+                  {formatMessageTime(messageTime)}
+                </span>
+                <ProfileAvatar role="user" isGrouped={isGrouped} />
+              </div>
             )}
-            <ProfileAvatar role="user" isGrouped={isGrouped} />
+            {isGrouped && (
+              <div className="mt-1">
+                <ProfileAvatar role="user" isGrouped={isGrouped} />
+              </div>
+            )}
           </div>
         )}
       </div>
