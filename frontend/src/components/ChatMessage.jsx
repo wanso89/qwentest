@@ -736,65 +736,50 @@ const SourcePreviewModal = ({ isOpen, onClose, source, content, image, isLoading
 };
 
 // 출처 컴포넌트 개선
-const SourceItem = ({ source, onClick, isFiltered = false }) => {
-  // source 객체가 없는 경우 기본값 설정
-  if (!source) {
-    return (
-      <div className="flex items-center p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
-        <div className="w-8 h-8 rounded-lg bg-red-200 dark:bg-red-800/50 flex items-center justify-center text-red-600 dark:text-red-400 mr-3 flex-shrink-0">
-          <FiAlertCircle size={16} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">
-            출처 정보 없음
-          </p>
-        </div>
-      </div>
-    );
-  }
+const SourceItem = ({ source, onClick, isFiltered = false, isCited = false, isReference = false }) => {
+  // 파일명 정제
+  const displayName = source.display_name || 
+    (source.path ? source.path.split('/').pop() : 
+    (source.source ? source.source.split('/').pop() : '알 수 없는 출처'));
   
-  // source.path 또는 source.source 중 사용 가능한 것을 선택
-  const sourcePath = source.path || source.source;
+  // 페이지 정보
+  const pageInfo = source.page && source.page > 0 ? `p.${source.page}` : '';
   
-  // 소스 경로가 없는 경우
-  if (!sourcePath) {
-    return (
-      <div className="flex items-center p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
-        <div className="w-8 h-8 rounded-lg bg-red-200 dark:bg-red-800/50 flex items-center justify-center text-red-600 dark:text-red-400 mr-3 flex-shrink-0">
-          <FiAlertCircle size={16} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">
-            출처 경로 정보 없음
-          </p>
-        </div>
-      </div>
-    );
-  }
-  
-  // 파일명에서 UUID 접두사 제거
-  const displayName = sourcePath.includes('_') 
-    ? sourcePath.split('_').slice(1).join('_')
-    : sourcePath;
+  // 관련성 점수
+  const relevanceScore = typeof source.score === 'number' ? 
+    source.score > 0.7 ? '높음' : 
+    source.score > 0.4 ? '중간' : '낮음' : '';
   
   return (
     <div 
-      className={`flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors ${
-        isFiltered ? 'opacity-40' : ''
-      }`}
       onClick={() => onClick(source)}
+      className={`flex items-center px-2 py-1.5 text-xs rounded-md cursor-pointer transition-colors
+        ${isCited ? 'bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30' : 
+          isReference ? 'bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800/70' : 
+          'bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-800/50'}
+        ${isFiltered ? 'border-l-2 border-yellow-400' : ''}`}
+      title={`${isCited ? '인용 출처' : '참고 문서'} - ${displayName}${pageInfo ? ` (${pageInfo})` : ''}`}
     >
-      <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mr-3 flex-shrink-0">
-        <FiFileText size={16} />
+      <div className={`mr-2 flex-shrink-0 
+        ${isCited ? 'text-indigo-500 dark:text-indigo-400' : 
+          isReference ? 'text-gray-400 dark:text-gray-500' : 
+          'text-gray-400'}`}>
+        {isCited ? (
+          <FiBookmark size={14} />
+        ) : isReference ? (
+          <FiFileText size={14} />
+        ) : (
+          <FiFile size={14} />
+        )}
       </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
+      <div className="flex-grow truncate">
+        <span className={`font-medium ${isCited ? 'text-gray-700 dark:text-gray-200' : 'text-gray-600 dark:text-gray-400'}`}>
           {displayName}
-        </p>
-        {source.page && (
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            페이지 {source.page}
-          </p>
+        </span>
+        {pageInfo && (
+          <span className="ml-1 text-gray-500 dark:text-gray-500">
+            {pageInfo}
+          </span>
         )}
       </div>
       <div className="ml-2 text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
@@ -1805,18 +1790,44 @@ function ChatMessage({ message, searchTerm = "", isSearchMode, prevMessage, next
       ? message.cited_sources 
       : message.sources.filter(s => s && s.is_cited === true);
     
-    // 인용된 출처가 없는 경우 표시하지 않음
-    if (citedSources.length === 0) {
+    // 참고 문서 - 인용되지 않은 소스 중 상위 2개 (인용된 소스가 없을 때만)
+    const referenceSources = [];
+    if (citedSources.length === 0 && message.sources.length > 0) {
+      // 인용된 소스가 없을 때 상위 2개 문서를 참고 문서로 표시
+      const sortedSources = [...message.sources]
+        .filter(s => s && (s.path || s.source)) // 유효한 소스만 필터링
+        .sort((a, b) => (b.score || 0) - (a.score || 0)) // 점수 기준 내림차순 정렬
+        .slice(0, 2); // 상위 2개만 선택
+      
+      referenceSources.push(...sortedSources);
+    }
+    
+    // 표시할 소스가 없는 경우 (인용 소스도 없고 참고 문서도 없는 경우)
+    if (citedSources.length === 0 && referenceSources.length === 0) {
       return null;
     }
 
     // 인용된 출처에 대해서만 필터링 적용
-    const displaySources = sourceFilterText
+    const displayCitedSources = sourceFilterText
       ? citedSources.filter(source => {
           const sourcePath = source.path || source.source || "";
           return sourcePath.toLowerCase().includes(sourceFilterText.toLowerCase());
         })
       : citedSources;
+      
+    // 참고 문서에 대해서도 필터링 적용
+    const displayReferenceSources = sourceFilterText
+      ? referenceSources.filter(source => {
+          const sourcePath = source.path || source.source || "";
+          return sourcePath.toLowerCase().includes(sourceFilterText.toLowerCase());
+        })
+      : referenceSources;
+      
+    // 표시할 소스가 필터링 후에도 있는지 확인
+    const hasAnySourcesToDisplay = displayCitedSources.length > 0 || displayReferenceSources.length > 0;
+    if (!hasAnySourcesToDisplay) {
+      return null;
+    }
 
     return (
       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
@@ -1830,10 +1841,12 @@ function ChatMessage({ message, searchTerm = "", isSearchMode, prevMessage, next
             ) : (
               <FiChevronRight className="mr-1" size={14} />
             )}
-            출처 {displaySources.length}개
+            {displayCitedSources.length > 0 ? `출처 ${displayCitedSources.length}개` : 
+             displayReferenceSources.length > 0 ? `참고 문서 ${displayReferenceSources.length}개` : 
+             '출처 정보'}
           </button>
           
-          {sourcesVisible && displaySources.length > 3 && (
+          {sourcesVisible && (displayCitedSources.length + displayReferenceSources.length) > 3 && (
             <div className="relative">
               <input
                 type="text"
@@ -1856,15 +1869,46 @@ function ChatMessage({ message, searchTerm = "", isSearchMode, prevMessage, next
         
         {sourcesVisible && (
           <div className="space-y-1 max-h-40 overflow-y-auto custom-scrollbar">
-            {displaySources.length > 0 ? (
-              displaySources.map((source, index) => (
-                <SourceItem 
-                  key={`${source.source || source.path}-${source.page}-${index}`}
-                  source={source}
-                  onClick={handlePreviewSource}
-                />
-              ))
-            ) : (
+            {/* 인용 출처 표시 */}
+            {displayCitedSources.length > 0 && (
+              <>
+                {displayCitedSources.length > 0 && displayReferenceSources.length > 0 && (
+                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 mt-1">
+                    인용 출처:
+                  </div>
+                )}
+                {displayCitedSources.map((source, index) => (
+                  <SourceItem 
+                    key={`cited-${source.source || source.path}-${source.page}-${index}`}
+                    source={source}
+                    onClick={handlePreviewSource}
+                    isCited={true}
+                  />
+                ))}
+              </>
+            )}
+            
+            {/* 참고 문서 표시 */}
+            {displayReferenceSources.length > 0 && (
+              <>
+                {displayCitedSources.length > 0 && displayReferenceSources.length > 0 && (
+                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 mt-2">
+                    참고 문서:
+                  </div>
+                )}
+                {displayReferenceSources.map((source, index) => (
+                  <SourceItem 
+                    key={`ref-${source.source || source.path}-${source.page}-${index}`}
+                    source={source}
+                    onClick={handlePreviewSource}
+                    isReference={true}
+                  />
+                ))}
+              </>
+            )}
+            
+            {/* 필터링 결과가 없는 경우 */}
+            {displayCitedSources.length === 0 && displayReferenceSources.length === 0 && (
               <p className="text-xs text-gray-500 dark:text-gray-400 py-2 text-center">
                 {sourceFilterText ? '검색 결과가 없습니다.' : '출처 정보가 없습니다.'}
               </p>

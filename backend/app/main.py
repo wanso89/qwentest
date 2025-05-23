@@ -2336,24 +2336,24 @@ async def chat(fastapi_request: FastAPIRequest, request: QuestionRequest = Body(
                         cited = False
                         source_text = top_docs_content[i].page_content if i < len(top_docs_content) else ""
                         
-                        # 1. 연속된 텍스트 일치 여부 확인 (최소 40자로 상향 조정)
-                        if len(source_text) > 50:
-                            # 더 긴 스니펫(40자)으로 일치 여부 확인하여 정확도 향상
-                            for j in range(0, len(source_text) - 40, 10):
-                                snippet = source_text[j:j+40]
+                        # 1. 연속된 텍스트 일치 여부 확인 (최소 40자에서 25자로 낮춤)
+                        if len(source_text) > 40:  # 최소 길이 조건은 유지
+                            # 더 짧은 스니펫(25자)으로 일치 여부 확인하여 정확도 향상
+                            for j in range(0, len(source_text) - 25, 5):  # 간격도 10에서 5로 줄임
+                                snippet = source_text[j:j+25]
                                 if snippet in cleaned_text:
                                     cited = True
-                                    logger.debug(f"문서 인용 감지: 40자 스니펫 일치 - {snippet[:20]}...")
+                                    logger.debug(f"문서 인용 감지: 25자 스니펫 일치 - {snippet[:20]}...")
                                     break
                         
-                        # 2. 키워드 기반 매칭 (매칭 비율 임계값 0.3 → 0.4로 상향 조정)
+                        # 2. 키워드 기반 매칭 (매칭 비율 임계값 0.4에서 0.3으로 낮춤)
                         if not cited and source_text:
                             source_keywords = extract_keywords(source_text)
                             if source_keywords:
                                 matches = [k for k in source_keywords if k in cleaned_text]
                                 match_ratio = len(matches) / len(source_keywords)
-                                # 매칭 비율 임계값 상향 조정 (0.3 → 0.4)
-                                if match_ratio > 0.4:
+                                # 매칭 비율 임계값 하향 조정 (0.4 → 0.3)
+                                if match_ratio > 0.3:
                                     cited = True
                                     logger.debug(f"문서 인용 감지: 키워드 매칭 비율 {match_ratio:.2f} - 키워드: {matches[:5]}...")
                         
