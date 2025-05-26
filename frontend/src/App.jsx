@@ -22,6 +22,15 @@ import {
 // API 기본 URL 상수 정의
 const API_BASE_URL = 'http://172.10.2.70:8000';
 
+// 백엔드 연결 상태를 관리하는 상수 추가
+const BACKEND_STATUS = {
+  UNKNOWN: 'unknown',
+  CONNECTED: 'connected',
+  DISCONNECTED: 'disconnected',
+  CONNECTING: 'connecting',
+  ERROR: 'error'
+};
+
 const SIDEBAR_WIDTH = 320;
 const SIDEBAR_MIN = 280;
 const SIDEBAR_MAX = 450;
@@ -148,10 +157,329 @@ function App() {
   // 응답 중단을 위한 AbortController 레퍼런스 추가
   const abortControllerRef = useRef(null);
 
-  console.log('===============================================');
-  console.log('앱 컴포넌트 초기화');
-  console.log('showSQLPage 초기값:', showSQLPage);
-  console.log('mode 초기값:', mode);
+  // 백엔드 연결 상태를 관리하는 상수 추가
+  const [backendStatus, setBackendStatus] = useState(BACKEND_STATUS.UNKNOWN);
+  const [backendServices, setBackendServices] = useState({});
+  const [pendingSync, setPendingSync] = useState([]);
+  const backendCheckInterval = useRef(null);
+
+  // 대화 응답 중 상태 추가 (App 함수 상단 useState 부분에)
+  const [isResponding, setIsResponding] = useState(false);
+  const [responseBlockedMessage, setResponseBlockedMessage] = useState(null);
+
+  // 대화 중 잠금 설명 메시지 (다국어 지원 가능)
+  const lockMessages = {
+    conversationSwitch: "현재 대화 응답이 진행 중입니다. 완료 또는 중지 후 다른 대화로 이동할 수 있습니다.",
+    newConversation: "현재 대화 응답이 진행 중입니다. 완료 또는 중지 후 새 대화를 시작할 수 있습니다."
+  };
+
+  // 대화 저장 함수 개선 - 백엔드 상태에 따라 다른 전략 사용
+  const saveConversationToBackend = async (
+    userId,
+    conversationId,
+    messages
+  ) => {
+    try {
+      // 로컬 스토리지에 항상 저장
+      const localSaveKey = `conversation_${conversationId}`;
+      const conversationData = {
+        id: conversationId,
+        messages,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem(localSaveKey, JSON.stringify(conversationData));
+      
+      // 백엔드 연결 상태 확인
+      if (backendStatus !== BACKEND_STATUS.CONNECTED) {
+        console.log("백엔드 연결 없음: 로컬에만 저장하고 동기화 예약");
+        addToPendingSync(conversationId);
+        return false;
+      }
+      
+      // 백엔드 요청 시도 (타임아웃 설정)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5초 타임아웃
+      
+      const response = await fetch(
+        `${API_BASE_URL}/api/conversations/save`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            conversationId: conversationId,
+            messages: messages.map((msg) => ({
+              role: msg.role,
+              content: msg.content,
+              sources: msg.sources || [],
+            })),
+          }),
+          signal: controller.signal
+        }
+      );
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        console.warn(`대화 저장 실패: ${response.status} ${response.statusText}`);
+        setSaveError("대화 저장에 실패했습니다. 로컬에만 저장됩니다.");
+        setTimeout(() => setSaveError(null), 5000);
+        addToPendingSync(conversationId);
+        return false;
+      }
+      
+      console.log("대화가 백엔드에 저장되었습니다.");
+      setSaveError(null); // 성공 시 오류 메시지 초기화
+      removeFromPendingSync(conversationId); // 동기화 목록에서 제거
+      return true;
+    } catch (err) {
+      console.warn("대화 저장 중 오류 발생:", err.message);
+      setSaveError("대화 저장에 실패했습니다. 로컬에만 저장됩니다."); // 오류 메시지 설정
+      setTimeout(() => setSaveError(null), 5000); // 5초 후 알림 사라짐
+      addToPendingSync(conversationId); // 동기화 목록에 추가
+      return false;
+    }
+  };
+
+  // 대화 불러오기 함수 개선 - 백엔드 상태에 따라 다른 전략 사용
+  const loadConversationFromBackend = async (userId, conversationId) => {
+    // 먼저 로컬 데이터 확인
+    const localSaveKey = `conversation_${conversationId}`;
+    let localData = null;
+    
+    try {
+      const storedData = localStorage.getItem(localSaveKey);
+      if (storedData) {
+        localData = JSON.parse(storedData);
+      }
+    } catch (err) {
+      console.warn("로컬 대화 데이터 파싱 오류:", err);
+    }
+    
+    // 백엔드 연결 상태 확인
+    if (backendStatus !== BACKEND_STATUS.CONNECTED) {
+      console.log("백엔드 연결 없음: 로컬 데이터 사용");
+      
+      if (localData) {
+        // 로컬 데이터로 대화 업데이트
+        setConversations((prev) =>
+          prev.map((conv) =>
+            conv.id === conversationId
+              ? { ...conv, messages: localData.messages }
+              : conv
+          )
+        );
+        return localData;
+      }
+      
+      return null;
+    }
+    
+    try {
+      // 백엔드 요청 시도 (타임아웃 설정)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5초 타임아웃
+      
+      const response = await fetch(
+        `${API_BASE_URL}/api/conversations/load`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            conversationId: conversationId,
+          }),
+          signal: controller.signal
+        }
+      );
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        console.warn(`대화 불러오기 실패: ${response.status} ${response.statusText}`);
+        
+        // 백엔드 실패 시 로컬 데이터 사용
+        if (localData) {
+          setConversations((prev) =>
+            prev.map((conv) =>
+              conv.id === conversationId
+                ? { ...conv, messages: localData.messages }
+                : conv
+            )
+          );
+          return localData;
+        }
+        
+        return null;
+      }
+      
+      const data = await response.json();
+      if (data.status === "success" && data.conversation) {
+        setConversations((prev) =>
+          prev.map((conv) =>
+            conv.id === conversationId
+              ? { ...conv, messages: data.conversation.messages }
+              : conv
+          )
+        );
+        console.log("대화가 백엔드에서 불러와졌습니다.");
+        
+        // 백엔드 데이터를 로컬에도 저장 (동기화)
+        localStorage.setItem(
+          localSaveKey, 
+          JSON.stringify({
+            id: conversationId,
+            messages: data.conversation.messages,
+            timestamp: new Date().toISOString()
+          })
+        );
+        
+        return data.conversation;
+      }
+    } catch (err) {
+      console.warn("대화 불러오기 중 오류 발생:", err.message);
+      
+      // 오류 발생 시 로컬 데이터 사용
+      if (localData) {
+        setConversations((prev) =>
+          prev.map((conv) =>
+            conv.id === conversationId
+              ? { ...conv, messages: localData.messages }
+              : conv
+          )
+        );
+        return localData;
+      }
+    }
+    
+    return null;
+  };
+
+  // 백엔드 상태 확인 함수 추가
+  const checkBackendStatus = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/health-check`, { 
+        method: 'GET',
+        signal: AbortSignal.timeout(3000) // 3초 타임아웃
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          status: BACKEND_STATUS.CONNECTED,
+          services: data.services,
+          timestamp: data.timestamp
+        };
+      } else {
+        return { 
+          status: BACKEND_STATUS.ERROR,
+          error: `HTTP 오류: ${response.status} ${response.statusText}`
+        };
+      }
+    } catch (error) {
+      return { 
+        status: BACKEND_STATUS.DISCONNECTED,
+        error: error.message
+      };
+    }
+  };
+
+  // 백엔드 상태 확인 및 재연결 시도
+  const checkAndUpdateBackendStatus = useCallback(async () => {
+    const status = await checkBackendStatus();
+    setBackendStatus(status.status);
+    
+    if (status.status === BACKEND_STATUS.CONNECTED) {
+      setBackendServices(status.services || {});
+      // 백엔드가 연결되면 미동기화 대화 동기화 시도
+      syncPendingConversations();
+    } else {
+      setBackendServices({});
+    }
+    
+    return status.status === BACKEND_STATUS.CONNECTED;
+  }, []);
+
+  // 백엔드 연결 상태를 주기적으로 확인
+  useEffect(() => {
+    // 첫 로드 시 상태 확인
+    checkAndUpdateBackendStatus();
+    
+    // 30초마다 백엔드 상태 확인
+    backendCheckInterval.current = setInterval(() => {
+      checkAndUpdateBackendStatus();
+    }, 30000);
+    
+    return () => {
+      if (backendCheckInterval.current) {
+        clearInterval(backendCheckInterval.current);
+      }
+    };
+  }, [checkAndUpdateBackendStatus]);
+
+  // 미동기화 대화 목록을 로컬 스토리지에서 관리
+  const addToPendingSync = (conversationId) => {
+    setPendingSync(prev => {
+      if (!prev.includes(conversationId)) {
+        const updated = [...prev, conversationId];
+        localStorage.setItem('pendingConversationSyncs', JSON.stringify(updated));
+        return updated;
+      }
+      return prev;
+    });
+  };
+  
+  const removeFromPendingSync = (conversationId) => {
+    setPendingSync(prev => {
+      const updated = prev.filter(id => id !== conversationId);
+      localStorage.setItem('pendingConversationSyncs', JSON.stringify(updated));
+      return updated;
+    });
+  };
+  
+  // 로컬 스토리지에서 미동기화 목록 불러오기
+  useEffect(() => {
+    try {
+      const pendingSyncs = JSON.parse(localStorage.getItem('pendingConversationSyncs') || '[]');
+      setPendingSync(pendingSyncs);
+    } catch (e) {
+      console.warn("미동기화 목록 불러오기 실패", e);
+      localStorage.setItem('pendingConversationSyncs', '[]');
+    }
+  }, []);
+
+  // 백엔드 연결 시 미동기화 대화 동기화
+  const syncPendingConversations = async () => {
+    if (backendStatus !== BACKEND_STATUS.CONNECTED || pendingSync.length === 0) {
+      return;
+    }
+    
+    console.log(`미동기화 대화 ${pendingSync.length}개 동기화 시작`);
+    
+    for (const convId of pendingSync) {
+      const localData = localStorage.getItem(`conversation_${convId}`);
+      if (localData) {
+        try {
+          const { messages } = JSON.parse(localData);
+          const success = await saveConversationToBackend(userId, convId, messages);
+          if (success) {
+            console.log(`대화 ${convId} 동기화 완료`);
+            removeFromPendingSync(convId);
+          }
+        } catch (error) {
+          console.warn(`대화 ${convId} 동기화 실패: ${error.message}`);
+          // 동기화 실패 시 계속 재시도 목록에 유지
+        }
+      } else {
+        // 로컬 데이터가 없는 경우 목록에서 제거
+        removeFromPendingSync(convId);
+      }
+    }
+  };
   
   // 브라우저 콘솔에서 직접 상태를 변경할 수 있는 디버깅 함수 추가
   useEffect(() => {
@@ -188,7 +516,7 @@ function App() {
   
   // mode 상태가 변경될 때 toast 메시지 표시
   useEffect(() => {
-    console.log('모드 변경됨:', mode);
+
     // 전역 변수에 현재 모드 저장 (ModeToggleSwitch 컴포넌트에서 참조)
     if (typeof window !== 'undefined') {
       window.currentAppMode = mode;
@@ -206,7 +534,6 @@ function App() {
 
   // showSQLPage 상태 변경 감지 useEffect 추가
   useEffect(() => {
-    console.log('showSQLPage 상태 변경됨:', showSQLPage);
   }, [showSQLPage]);
 
   // 테마 변경 함수
@@ -334,12 +661,12 @@ function App() {
   // 파일 목록 새로고침 함수 추가
   const handleRefreshFiles = () => {
     setFileManagerOpen(true);
-    console.log('파일 목록 새로고침');
+   
   };
 
   // 파일 업로드 완료 핸들러 추가
   const handleUploadSuccess = (files) => {
-    console.log('업로드 성공:', files);
+  
     setIsEmbedding(true);
     setEmbeddedFiles(files);
 
@@ -534,6 +861,14 @@ function App() {
 
   // 새 대화 생성
   const handleNewConversation = (topic, category, forceFirst = false) => {
+    // 응답 중이면 새 대화 생성 차단
+    if (isResponding) {
+      console.log("대화 응답 중에는 새 대화를 생성할 수 없습니다.");
+      setResponseBlockedMessage(lockMessages.newConversation);
+      setTimeout(() => setResponseBlockedMessage(null), 3000); // 3초 후 메시지 제거
+      return;
+    }
+    
     try {
       console.log('새 대화 시작...', topic, category);
     
@@ -603,6 +938,14 @@ function App() {
         setSidebarOpen(false);
       }
       
+      // URL 파라미터 업데이트
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("convId", newId);
+      window.history.pushState({}, "", currentUrl.toString());
+
+      // localStorage에 활성 대화 ID 저장
+      localStorage.setItem("activeConversationId", newId);
+      
       return newId;
     } catch (error) {
       console.error('새 대화 생성 중 오류 발생:', error);
@@ -612,33 +955,45 @@ function App() {
 
   // 대화 선택
   const handleSelectConversation = (id) => {
+    // 이미 선택된 대화면 아무것도 하지 않음
+    if (id === activeConversationId) return;
+    
+    // 응답 중이면 대화 전환 차단
+    if (isResponding) {
+      console.log("대화 응답 중에는 대화를 전환할 수 없습니다.");
+      setResponseBlockedMessage(lockMessages.conversationSwitch);
+      setTimeout(() => setResponseBlockedMessage(null), 3000); // 3초 후 메시지 제거
+      return;
+    }
+
+    // 대화 전환 처리
     setActiveConversationId(id);
-    // 백엔드에서 대화 불러오기 (필요 시)
-    loadConversationFromBackend(userId, id);
-    // 모바일에서 대화 선택 시 사이드바 닫기
+
+    // URL 파라미터 업데이트
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set("convId", id);
+    window.history.pushState({}, "", currentUrl.toString());
+
+    // localStorage에 활성 대화 ID 저장
+    localStorage.setItem("activeConversationId", id);
+
+    // 모바일에서 사이드바 닫기
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
     }
     
-    // 대화창 전환 시 스크롤을 최신 메시지로 강력하게 이동시키기 위한 다중 이벤트 발생
-    
-    // 1. 즉시 이벤트 발생
-    window.dispatchEvent(new CustomEvent('chatScrollToBottom'));
-    
-    // 2. 약간의 지연 후 이벤트 발생 (DOM 업데이트 기다림)
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('chatScrollToBottom'));
-    }, 50);
-    
-    // 3. 대화 내용 로드 완료 후 이벤트 발생 (비동기 작업 완료 대기)
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('chatScrollToBottom'));
-    }, 300);
-    
-    // 4. 렌더링 완료 보장을 위한 추가 이벤트
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('chatScrollToBottom'));
-    }, 800);
+    // 대화를 먼저 불러오고 활성 대화 ID 설정
+    const activeConv = conversations.find((conv) => conv.id === id);
+    if (activeConv) {
+      setCurrentMessages(activeConv.messages);
+    } else {
+      loadConversationFromBackend(userId, id).then(() => {
+        const loadedConv = conversations.find((conv) => conv.id === id);
+        if (loadedConv) {
+          setCurrentMessages(loadedConv.messages);
+        }
+      });
+    }
   };
 
   // 대화 삭제
@@ -688,270 +1043,6 @@ function App() {
         conv.id === id ? { ...conv, pinned: !conv.pinned } : conv
       )
     );
-  };
-
-  // 백엔드에 대화 저장
-  const saveConversationToBackend = async (
-    userId,
-    conversationId,
-    messages
-  ) => {
-    try {
-      // 백엔드 요청 시도 (타임아웃 설정)
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3초 타임아웃
-      
-      const response = await fetch(
-        "/api/conversations/save",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: userId,
-            conversationId: conversationId,
-            messages: messages.map((msg) => ({
-              role: msg.role,
-              content: msg.content,
-              sources: msg.sources || [],
-            })),
-          }),
-          signal: controller.signal
-        }
-      );
-      
-      clearTimeout(timeoutId);
-      
-      if (!response.ok) {
-        console.warn(`대화 저장 실패: ${response.status} ${response.statusText}`);
-        setSaveError("대화 저장에 실패했습니다. 로컬에만 저장됩니다.");
-        setTimeout(() => setSaveError(null), 5000);
-        return;
-      }
-      
-      console.log("대화가 백엔드에 저장되었습니다.");
-      setSaveError(null); // 성공 시 오류 메시지 초기화
-    } catch (err) {
-      console.warn("대화 저장 중 오류 발생:", err.message);
-      setSaveError("대화 저장에 실패했습니다. 로컬에만 저장됩니다."); // 오류 메시지 설정
-      // 로컬 저장은 이미 conversations 변경 시 useEffect에서 보장됨
-      setTimeout(() => setSaveError(null), 5000); // 5초 후 알림 사라짐
-    }
-  };
-
-  // 백엔드에서 대화 불러오기
-  const loadConversationFromBackend = async (userId, conversationId) => {
-    try {
-      // 백엔드 요청 시도 (타임아웃 설정)
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3초 타임아웃
-      
-      const response = await fetch(
-        "/api/conversations/load",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: userId,
-            conversationId: conversationId,
-          }),
-          signal: controller.signal
-        }
-      );
-      
-      clearTimeout(timeoutId);
-      
-      if (!response.ok) {
-        console.warn(`대화 불러오기 실패: ${response.status} ${response.statusText}`);
-        return; // 로컬 데이터 유지
-      }
-      
-      const data = await response.json();
-      if (data.status === "success" && data.conversation) {
-        setConversations((prev) =>
-          prev.map((conv) =>
-            conv.id === conversationId
-              ? { ...conv, messages: data.conversation.messages }
-              : conv
-          )
-        );
-        console.log("대화가 백엔드에서 불러와졌습니다.");
-      }
-    } catch (err) {
-      console.warn("대화 불러오기 중 오류 발생:", err.message);
-      console.log("로컬 대화 데이터를 사용합니다.");
-    }
-  };
-
-  // conversations와 activeConversationId가 초기화된 경우에만 메시지 가져오기
-  useEffect(() => {
-    if (conversations.length > 0 && activeConversationId) {
-      const activeConv = conversations.find(
-        (conv) => conv.id === activeConversationId
-      );
-      if (activeConv) {
-        setCurrentMessages(activeConv.messages);
-      }
-    } else {
-      setCurrentMessages([
-        {
-          role: "assistant",
-          content: "안녕하세요! 무엇을 도와드릴까요?",
-          sources: [],
-        },
-      ]);
-    }
-  }, [conversations, activeConversationId]);
-
-  // 반응형: 화면 크기 변경 시 사이드바 상태 업데이트
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768 && sidebarOpen) {
-        setSidebarOpen(false);
-      } else if (window.innerWidth >= 1200 && !sidebarOpen) {
-        setSidebarOpen(true);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [sidebarOpen]);
-
-  // 드래그 핸들러
-  const handleMouseDown = (e) => {
-    isResizing.current = true;
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  };
-  const handleMouseMove = (e) => {
-    if (!isResizing.current) return;
-    const newWidth = Math.max(
-      SIDEBAR_MIN,
-      Math.min(SIDEBAR_MAX, e.clientX)
-    );
-    setSidebarWidth(newWidth);
-  };
-  const handleMouseUp = () => {
-    isResizing.current = false;
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-  };
-
-  // 토글(여닫이) 버튼
-  const handleToggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  // 메시지 업데이트
-  const handleUpdateMessages = (updatedMessages) => {
-    if (!activeConversationId) return;
-    
-    // 대화 업데이트
-    setConversations((prev) => {
-      const updated = prev.map((conv) => {
-        if (conv.id === activeConversationId) {
-          // 기존 대화 업데이트
-          return { ...conv, messages: updatedMessages, timestamp: new Date().getTime() };
-        }
-        return conv;
-      });
-      return updated;
-    });
-    setCurrentMessages(updatedMessages);
-    
-    // 자동 제목 생성 로직: 사용자 메시지가 있을 때 모든 제목에 대해 동작
-    const userMessages = updatedMessages.filter(msg => msg.role === "user");
-    
-    // 첫 번째 사용자 메시지가 추가됐을 때만 자동 제목 생성을 수행
-    const activeConv = conversations.find(c => c.id === activeConversationId);
-    const prevUserMessages = activeConv?.messages?.filter(msg => msg.role === "user") || [];
-    
-    if (userMessages.length > 0 && prevUserMessages.length === 0) {
-      console.log("첫 질문 감지: 자동 제목 생성 시도");
-      // 비동기로 제목 생성 API 호출
-      generateTitleForConversation(activeConversationId, updatedMessages);
-    }
-  };
-
-  // 대화 제목 자동 생성 함수
-  const generateTitleForConversation = async (conversationId, messages) => {
-    try {
-      console.log("제목 생성 API 호출 - 메시지:", messages);
-      
-      // 백엔드 요청 시도 (타임아웃 설정)
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5초 타임아웃
-      
-      const response = await fetch("/api/generate-title", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ messages }),
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeoutId);
-      
-      if (!response.ok) {
-        console.warn(`제목 생성 실패: ${response.status} ${response.statusText}`);
-        // 백엔드 API 호출 실패 시 대화 메시지 기반으로 제목 생성
-        generateFallbackTitle(conversationId, messages);
-        return;
-      }
-      
-      const data = await response.json();
-      console.log("제목 생성 응답:", data);
-      
-      if (data.status === "success" && data.title) {
-        // 백엔드에서 제공한 제목으로 업데이트
-        handleRenameConversation(conversationId, data.title);
-      } else {
-        // 실패하면 폴백 제목 생성
-        generateFallbackTitle(conversationId, messages);
-      }
-    } catch (err) {
-      console.warn("제목 생성 중 오류 발생:", err.message);
-      // 오류 발생 시 폴백 제목 생성
-      generateFallbackTitle(conversationId, messages);
-    }
-  };
-
-  // 오류 시 폴백 제목 생성 함수
-  const generateFallbackTitle = (conversationId, messages) => {
-    try {
-      // 첫 사용자 메시지를 기반으로 제목 생성
-      const userMessage = messages.find(msg => msg.role === "user");
-      
-      if (userMessage) {
-        // 첫 질문의 처음 15자를 추출하고 말줄임표 추가
-        let title = userMessage.content.trim().substring(0, 15);
-        if (userMessage.content.length > 15) {
-          title += "...";
-        }
-        
-        // 제목이 너무 짧으면 기본 제목 사용
-        if (title.length < 5) {
-          const defaultTitle = `대화 ${new Date().toLocaleDateString('ko-KR')}`;
-          handleRenameConversation(conversationId, defaultTitle);
-        } else {
-          // 추출한 제목으로 업데이트
-          handleRenameConversation(conversationId, title);
-        }
-      }
-    } catch (error) {
-      console.warn("폴백 제목 생성 실패:", error);
-      // 최종 폴백: 현재 날짜/시간 기반 제목
-      const timestamp = new Date().toLocaleDateString('ko-KR', { 
-        month: 'short', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      });
-      handleRenameConversation(conversationId, `대화 ${timestamp}`);
-    }
   };
 
   // 모드 전환 함수 - 챗봇 <-> SQL 질의 모드 전환
@@ -1160,209 +1251,492 @@ function App() {
     }
   }, [mode, fetchDashboardStats, fetchRecentQueries, fetchDbSchema]);
 
+  // 제출 함수 수정 - 응답 상태 관리 추가
   const handleSubmit = async (input, selectedCategory) => {
     if (!input.trim()) return;
+
+    // 응답 시작 - 잠금 활성화
+    setIsResponding(true);
+    
+    // 채팅 모드가 아니면 새 대화 생성
+    let currentConversationId = activeConversationId;
+    if (!activeConversationId) {
+      currentConversationId = handleNewConversation("", selectedCategory, true);
+    }
 
     // 사용자 메시지 추가
     const userMessage = {
       role: "user",
       content: input,
-      timestamp: new Date().getTime(),
+      sources: [],
     };
 
-    // 임시 응답 메시지 추가
-    const tempResponseMessage = {
-      role: "assistant",
-      content: "",
-      timestamp: new Date().getTime(),
-      isStreaming: true, // 스트리밍 중임을 표시
-    };
+    setCurrentMessages((prev) => [...prev, userMessage]);
 
-    // 메시지 목록 업데이트
-    setCurrentMessages((prevMessages) => [...prevMessages, userMessage, tempResponseMessage]);
-
-    // 대화 기록 구성
-    const conversationHistory = currentMessages
-      .filter((msg) => msg.role === "user" || msg.role === "assistant")
-      .map((msg) => ({
-        role: msg.role,
-        content: msg.content,
-      }));
+    // 대화 목록 업데이트
+    setConversations((prev) =>
+      prev.map((conv) =>
+        conv.id === currentConversationId
+          ? { ...conv, messages: [...conv.messages, userMessage] }
+          : conv
+      )
+    );
 
     try {
-      // 새로운 AbortController 생성
-      abortControllerRef.current = new AbortController();
-      const { signal } = abortControllerRef.current;
+      // 로딩 상태 설정
+      setIsLoading(true);
 
-      // 스트리밍 상태 활성화
-      setIsStreaming(true);
-      
-      console.log("App: 요청 시작, AbortController 생성됨");
+      // 백엔드에 질문 전송
+      const endpoint = useRagMode
+        ? "/api/chat"
+        : useSqlMode
+          ? "/api/sql-and-llm"
+          : "/api/chat";
 
-      const response = await fetch("/api/chat", {
+      // 이전 대화 내역 구성
+      const history = currentMessages
+        .filter((m) => m.role !== "error") // 오류 메시지 제외
+        .map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+
+      // 응답 스트림 설정
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           question: input,
-          category: selectedCategory,
-          history: conversationHistory,
+          category: selectedCategory || "메뉴얼",
+          history: history,
         }),
-        signal, // AbortController 시그널 추가
       });
 
       if (!response.ok) {
-        throw new Error(`서버 오류: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `서버 오류: ${response.status} ${response.statusText}`
+        );
       }
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let done = false;
-      let responseText = "";
+      let result = "";
+      let content = "";
+      let sources = [];
+      let messageId = "";
+      let fullMessageReceived = false;
 
-      // 응답 스트리밍 처리
-      while (!done) {
-        // 중단 여부 확인 (매 반복마다)
-        if (signal.aborted) {
-          console.log("App: 스트리밍 중 중단 신호 감지됨");
-          break;
-        }
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
 
-        const { value, done: readerDone } = await reader.read();
-        done = readerDone;
+        const chunk = decoder.decode(value, { stream: true });
+        result += chunk;
 
-        if (value) {
-          const chunk = decoder.decode(value, { stream: !done });
-          responseText += chunk;
+        const lines = result.split("\n\n");
+        result = lines.pop();
 
-          // 메시지 업데이트
-          setCurrentMessages((prevMessages) => {
-            const lastMessage = prevMessages[prevMessages.length - 1];
-            if (lastMessage && lastMessage.role === "assistant") {
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            try {
+              const data = JSON.parse(line.substring(6));
+
+              if (data.event === "eos") {
+                fullMessageReceived = true;
+                if (sources.length > 0) {
+                  // 메시지 ID도 같이 저장
+                  messageId = data.messageId || "";
+                }
+                continue;
+              }
+
+              if (data.token) {
+                content += data.token;
+                // 스트리밍 중에도 메시지 업데이트
+                setCurrentMessages((prev) => {
+                  const lastMessage = prev[prev.length - 1];
+                  if (
+                    lastMessage &&
+                    lastMessage.role === "assistant" &&
+                    !fullMessageReceived
+                  ) {
               return [
-                ...prevMessages.slice(0, -1),
-                { ...lastMessage, content: responseText },
-              ];
+                      ...prev.slice(0, prev.length - 1),
+                      {
+                        ...lastMessage,
+                        content,
+                        sources: sources.length > 0 ? sources : [],
+                      },
+                    ];
+                  } else if (!fullMessageReceived) {
+                    return [
+                      ...prev,
+                      {
+                        role: "assistant",
+                        content,
+                        sources: sources.length > 0 ? sources : [],
+                      },
+                    ];
+                  }
+                  return prev;
+                });
+              }
+
+              if (data.sources) {
+                sources = data.sources;
+              }
+            } catch (e) {
+              console.error("JSON 파싱 오류:", e, line.substring(6));
             }
-            return prevMessages;
-          });
+          }
         }
       }
 
-      // 스트리밍 완료 후 처리
-      if (!signal.aborted) {
-        console.log("App: 응답 스트리밍 완료");
-        
-        // 메시지에 최종 응답 설정 및 스트리밍 상태 제거
-        setCurrentMessages((prevMessages) => {
-          const lastMessage = prevMessages[prevMessages.length - 1];
+      // 완료된 메시지를 최종 상태로 업데이트
+      const finalMessage = {
+        role: "assistant",
+        content,
+        sources,
+        messageId,
+      };
+
+      // 메시지 목록 업데이트
+      setCurrentMessages((prev) => {
+        const lastMessage = prev[prev.length - 1];
           if (lastMessage && lastMessage.role === "assistant") {
             return [
-              ...prevMessages.slice(0, -1),
-              { 
-                ...lastMessage, 
-                content: responseText,
-                isStreaming: false
-              },
-            ];
+            ...prev.slice(0, prev.length - 1),
+            finalMessage,
+          ];
+        }
+        return [...prev, finalMessage];
+      });
+
+      // 대화 목록 업데이트
+      setConversations((prev) =>
+        prev.map((conv) => {
+          if (conv.id === currentConversationId) {
+            const updatedMessages = [...conv.messages];
+            const lastMessage = updatedMessages[updatedMessages.length - 1];
+            if (lastMessage && lastMessage.role === "assistant") {
+              updatedMessages[updatedMessages.length - 1] = finalMessage;
+            } else {
+              updatedMessages.push(finalMessage);
+            }
+            return { ...conv, messages: updatedMessages };
           }
-          return prevMessages;
-        });
+          return conv;
+        })
+      );
+
+      // 첫 응답이면 대화 제목 생성
+      if (currentMessages.length <= 2 && currentConversationId) {
+        generateTitleForConversation(currentConversationId, [
+          ...currentMessages,
+          userMessage,
+          finalMessage,
+        ]);
       }
+
+      // 대화 저장
+      saveConversationToBackend(
+        userId,
+        currentConversationId,
+        conversations.find(
+          (conv) => conv.id === currentConversationId
+        )?.messages.concat(finalMessage) || []
+      );
     } catch (error) {
-      // 중단 요청에 의한 에러인 경우 특별 처리
-      if (error.name === 'AbortError') {
-        console.log('App: 사용자에 의해 응답이 중단되었습니다.');
-        // 중단 메시지 처리는 handleStopGeneration에서 일괄적으로 수행하므로 여기서는 추가 작업 없음
-      } else {
-        console.error("App: 응답 처리 중 오류 발생:", error);
-        // 기존 에러 처리 로직 유지
+      console.error("오류 발생:", error);
+
+      // 오류 메시지 추가
         const errorMessage = {
-          role: "assistant",
-          content: "죄송합니다. 응답 처리 중 오류가 발생했습니다. 다시 시도해주세요.",
-          timestamp: new Date().getTime(),
-        };
-        setCurrentMessages(prevMessages => {
-          // 마지막 메시지가 빈 어시스턴트 메시지라면 교체, 아니면 추가
-          const lastMsg = prevMessages[prevMessages.length - 1];
-          if (lastMsg && lastMsg.role === "assistant" && !lastMsg.content) {
-            return [...prevMessages.slice(0, -1), errorMessage];
-          } else {
-            return [...prevMessages, errorMessage];
-          }
-        });
-      }
+        role: "error",
+        content: `오류가 발생했습니다: ${error.message || "알 수 없는 오류"}`,
+      };
+
+      setCurrentMessages((prev) => [...prev, errorMessage]);
+      setConversations((prev) =>
+        prev.map((conv) =>
+          conv.id === currentConversationId
+            ? { ...conv, messages: [...conv.messages, errorMessage] }
+            : conv
+        )
+      );
     } finally {
-      // 스트리밍 상태 비활성화 및 AbortController 참조 해제
-      // handleStopGeneration 함수에서도 setIsStreaming(false) 및 abortControllerRef.current = null을 호출하므로,
-      // 여기서의 호출은 스트리밍이 정상적으로 완료되었거나, AbortError 외의 다른 오류로 종료된 경우를 담당합니다.
-      // AbortError의 경우 handleStopGeneration에서 이미 처리되었으므로, 여기서는 추가적인 상태 변경이 발생하지 않습니다.
-      if (abortControllerRef.current !== null) { // handleStopGeneration에서 null로 설정되지 않은 경우에만 실행
-        setIsStreaming(false);
-        abortControllerRef.current = null;
-        console.log("App: handleSubmit finally - 스트리밍 상태 비활성화 및 컨트롤러 해제");
-      }
+      // 로딩 상태 해제
+      setIsLoading(false);
+      
+      // 응답 완료 - 잠금 해제
+      setIsResponding(false);
     }
   };
 
-  // 응답 생성 중단 함수
+  // 응답 중지 함수 수정 - 잠금 해제 추가
   const handleStopGeneration = () => {
-    console.log("App: 응답 생성 중단 함수 실행");
-    
-    // 이미 스트리밍이 중지된 상태라면 함수 종료
-    if (!isStreaming) {
-      console.log("App: 이미 스트리밍이 중단되어 있음");
-      return;
-    }
-    
-    // 디버그 정보 출력
-    console.log("App: 현재 AbortController 상태:", {
-      exists: !!abortControllerRef.current,
-      isStreaming: isStreaming
-    });
-    
-    // 스트리밍 상태 즉시 비활성화 (가장 먼저 실행)
-    setIsStreaming(false);
-    
     if (abortControllerRef.current) {
-      console.log("App: AbortController 중단 신호 발생");
-      
-      try {
-        // 명시적으로 abort 메서드 호출
-        abortControllerRef.current.abort("사용자가 응답 생성을 중지함");
-        console.log("App: abort() 메서드 호출 성공");
-      } catch (abortError) {
-        console.error("App: abort() 호출 중 오류:", abortError);
-      }
-      
-      // 즉시 참조 초기화
+      abortControllerRef.current.abort();
       abortControllerRef.current = null;
       
-      // 마지막 메시지가 어시스턴트 메시지인 경우에만 중단 표시 추가
-      const lastMessage = currentMessages[currentMessages.length - 1];
+      // 중지 시 잠금 해제
+      setIsResponding(false);
+    }
+  };
+
+  // 응답 차단 메시지 컴포넌트 추가 (return 부분의 적절한 위치에 삽입)
+  const ResponseBlockedMessage = () => {
+    if (!responseBlockedMessage) return null;
+    
+    return (
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 
+                     bg-red-600 text-white px-4 py-2 rounded-md shadow-lg
+                     animate-fade-in-down max-w-md text-center">
+        <p>{responseBlockedMessage}</p>
+      </div>
+    );
+  };
+
+  // 반응형: 화면 크기 변경 시 사이드바 상태 업데이트
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768 && sidebarOpen) {
+        setSidebarOpen(false);
+      } else if (window.innerWidth >= 1200 && !sidebarOpen) {
+        setSidebarOpen(true);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [sidebarOpen]);
+
+  // 드래그 핸들러
+  const handleMouseDown = (e) => {
+    isResizing.current = true;
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
+  const handleMouseMove = (e) => {
+    if (!isResizing.current) return;
+    const newWidth = Math.max(
+      SIDEBAR_MIN,
+      Math.min(SIDEBAR_MAX, e.clientX)
+    );
+    setSidebarWidth(newWidth);
+  };
+  const handleMouseUp = () => {
+    isResizing.current = false;
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+  };
+
+  // 토글(여닫이) 버튼
+  const handleToggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  // 메시지 업데이트
+  const handleUpdateMessages = (updatedMessages) => {
+    if (!activeConversationId) return;
+    
+    // 대화 업데이트
+    setConversations((prev) => {
+      const updated = prev.map((conv) => {
+        if (conv.id === activeConversationId) {
+          // 기존 대화 업데이트
+          return { ...conv, messages: updatedMessages, timestamp: new Date().getTime() };
+        }
+        return conv;
+      });
+      return updated;
+    });
+    setCurrentMessages(updatedMessages);
+    
+    // 자동 제목 생성 로직: 사용자 메시지가 있을 때 모든 제목에 대해 동작
+    const userMessages = updatedMessages.filter(msg => msg.role === "user");
+    
+    // 첫 번째 사용자 메시지가 추가됐을 때만 자동 제목 생성을 수행
+    const activeConv = conversations.find(c => c.id === activeConversationId);
+    const prevUserMessages = activeConv?.messages?.filter(msg => msg.role === "user") || [];
+    
+    if (userMessages.length > 0 && prevUserMessages.length === 0) {
+      console.log("첫 질문 감지: 자동 제목 생성 시도");
+      // 비동기로 제목 생성 API 호출
+      generateTitleForConversation(activeConversationId, updatedMessages);
+    }
+  };
+
+  // 대화 제목 자동 생성 함수
+  const generateTitleForConversation = async (conversationId, messages) => {
+    try {
+      console.log("제목 생성 API 호출 - 메시지:", messages);
       
-      if (lastMessage && lastMessage.role === "assistant") {
-        console.log("App: 응답 중단 메시지 추가");
-        
-        // 기존 메시지에 중단 표시 추가
-        const updatedLastMessage = {
-          ...lastMessage,
-          content: lastMessage.content + "\n\n(응답이 중단되었습니다)",
-          isStopped: true // 중단 플래그 추가
-        };
-        
-        // 마지막 메시지를 업데이트된 메시지로 교체
-        setCurrentMessages(prevMessages => [
-          ...prevMessages.slice(0, -1),
-          updatedLastMessage
-        ]);
+      // 백엔드 요청 시도 (타임아웃 설정)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5초 타임아웃
+      
+      const response = await fetch(`${API_BASE_URL}/api/generate-title`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages }),
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        console.warn(`제목 생성 실패: ${response.status} ${response.statusText}`);
+        // 백엔드 API 호출 실패 시 대화 메시지 기반으로 제목 생성
+        generateFallbackTitle(conversationId, messages);
+        return;
       }
       
-      console.log("App: 응답 중단 처리 완료");
-    } else {
-      console.log("App: 중단할 AbortController가 없음");
+      const data = await response.json();
+      console.log("제목 생성 응답:", data);
+      
+      if (data.title) {
+        // 백엔드에서 제공한 제목으로 업데이트
+        handleRenameConversation(conversationId, data.title);
+      } else {
+        // 실패하면 폴백 제목 생성
+        generateFallbackTitle(conversationId, messages);
+      }
+    } catch (err) {
+      console.warn("제목 생성 중 오류 발생:", err.message);
+      // 오류 발생 시 폴백 제목 생성
+      generateFallbackTitle(conversationId, messages);
     }
+  };
+
+  // 오류 시 폴백 제목 생성 함수
+  const generateFallbackTitle = (conversationId, messages) => {
+    try {
+      // 첫 사용자 메시지를 기반으로 제목 생성
+      const userMessage = messages.find(msg => msg.role === "user");
+      
+      if (userMessage) {
+        // 첫 질문의 처음 15자를 추출하고 말줄임표 추가
+        let title = userMessage.content.trim().substring(0, 15);
+        if (userMessage.content.length > 15) {
+          title += "...";
+        }
+        
+        // 제목이 너무 짧으면 기본 제목 사용
+        if (title.length < 5) {
+          const defaultTitle = `대화 ${new Date().toLocaleDateString('ko-KR')}`;
+          handleRenameConversation(conversationId, defaultTitle);
+    } else {
+          // 추출한 제목으로 업데이트
+          handleRenameConversation(conversationId, title);
+        }
+      }
+    } catch (error) {
+      console.warn("폴백 제목 생성 실패:", error);
+      // 최종 폴백: 현재 날짜/시간 기반 제목
+      const timestamp = new Date().toLocaleDateString('ko-KR', { 
+        month: 'short', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      });
+      handleRenameConversation(conversationId, `대화 ${timestamp}`);
+    }
+  };
+
+  // 백엔드 상태 표시 컴포넌트
+  const BackendStatusIndicator = () => {
+    // 상태에 따른 스타일 정의
+    const getStatusStyles = () => {
+      switch (backendStatus) {
+        case BACKEND_STATUS.CONNECTED:
+          return {
+            color: 'green',
+            icon: '●',
+            label: '연결됨'
+          };
+        case BACKEND_STATUS.DISCONNECTED:
+          return {
+            color: 'red',
+            icon: '●',
+            label: '연결 끊김'
+          };
+        case BACKEND_STATUS.CONNECTING:
+          return {
+            color: 'orange',
+            icon: '●',
+            label: '연결 중...'
+          };
+        case BACKEND_STATUS.ERROR:
+          return {
+            color: 'red',
+            icon: '✕',
+            label: '오류'
+          };
+        default:
+          return {
+            color: 'gray',
+            icon: '○',
+            label: '확인 중...'
+          };
+      }
+    };
+
+    const statusStyles = getStatusStyles();
+    
+    // 동기화 대기 중인 대화 수를 표시
+    const pendingSyncCount = pendingSync.length;
+    
+    return (
+      <div className="backend-status-indicator" 
+           style={{ 
+             position: 'absolute', 
+             bottom: '8px', 
+             right: '10px',
+             fontSize: '12px',
+             display: 'flex',
+             alignItems: 'center',
+             gap: '6px',
+             background: 'rgba(0,0,0,0.05)',
+             padding: '4px 8px',
+             borderRadius: '4px',
+             cursor: 'pointer',
+             zIndex: 100
+           }}
+           title={`백엔드 상태: ${statusStyles.label}\n${
+             backendStatus === BACKEND_STATUS.CONNECTED 
+               ? `서비스: Redis(${backendServices.redis ? '✓' : '✗'}), ES(${backendServices.elasticsearch ? '✓' : '✗'})`
+               : '백엔드 서버에 연결할 수 없습니다.'
+           }${pendingSyncCount > 0 ? `\n동기화 대기 중: ${pendingSyncCount}개` : ''}`}
+           onClick={() => {
+             // 클릭 시 즉시 상태 확인 및 동기화 시도
+             checkAndUpdateBackendStatus();
+           }}
+      >
+        <span style={{ color: statusStyles.color, fontWeight: 'bold' }}>
+          {statusStyles.icon}
+        </span>
+        <span>{statusStyles.label}</span>
+        {pendingSyncCount > 0 && (
+          <span style={{ 
+            background: 'orange', 
+            color: 'white', 
+            borderRadius: '50%', 
+            width: '16px', 
+            height: '16px',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            fontSize: '10px',
+            fontWeight: 'bold'
+          }}>
+            {pendingSyncCount}
+          </span>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -1456,6 +1830,8 @@ function App() {
           </div>
         )}
       </div>
+      <BackendStatusIndicator />
+      <ResponseBlockedMessage />
     </div>
   );
 }

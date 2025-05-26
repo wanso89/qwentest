@@ -32,3 +32,1565 @@ INFO:     Application startup complete.
 INFO:     Stopping reloader process [4015424]
 /root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
   warnings.warn('resource_tracker: There appear to be %d '
+INFO:     Will watch for changes in these directories: ['/home/test_code/test01/rag-chatbot/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [2472852] using WatchFiles
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 22, in <module>
+    from elasticsearch import Elasticsearch
+ModuleNotFoundError: No module named 'elasticsearch'
+INFO:     Stopping reloader process [2472852]
+INFO:     Will watch for changes in these directories: ['/home/test_code/test01/rag-chatbot/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [2474963] using WatchFiles
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.39s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:03,  1.51s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.46s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.08it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.12s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.37s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.49s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.03it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+INFO:     Started server process [2475008]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+[2025-05-26 11:36:00,317] [    INFO] main.py:2134 - Received chat request: '보안서약서 2조 내용 알려줘', Category: '메뉴얼', History items: 3
+[2025-05-26 11:36:00,572] [    INFO] main.py:2162 - Initial document retrieval completed in 0.2465 seconds. Found 10 docs.
+[2025-05-26 11:36:00,574] [    INFO] main.py:2176 - Search enhancement completed in 0.0015 seconds.
+[2025-05-26 11:36:00,688] [    INFO] main.py:2185 - Document reranking completed in 0.1137 seconds. Reranked to 3 docs.
+[2025-05-26 11:36:00,688] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:36:00,695] [    INFO] main.py:2207 - Prompt generation completed in 0.0067 seconds.
+[2025-05-26 11:36:00,697] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:36:04,546] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 270. Time: 3.8484s
+[2025-05-26 11:36:04,546] [    INFO] main.py:2371 - 인용된 소스 수: 2/3
+[2025-05-26 11:36:04,547] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:342e3c7e86dbf91d8c935cd1fe23a815
+[2025-05-26 11:36:04,547] [    INFO] main.py:2420 - Total chat request processing time: 4.2298 seconds.
+[2025-05-26 11:37:52,087] [    INFO] main.py:2134 - Received chat request: '개인 VM 생성 절차에 대해서 알려줘', Category: '메뉴얼', History items: 10
+[2025-05-26 11:37:52,156] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0600 seconds. Found 10 docs.
+[2025-05-26 11:37:52,157] [    INFO] main.py:2176 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 11:37:52,198] [    INFO] main.py:2185 - Document reranking completed in 0.0409 seconds. Reranked to 3 docs.
+[2025-05-26 11:37:52,198] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:37:52,198] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:37:52,201] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:38:00,791] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 749. Time: 8.5898s
+[2025-05-26 11:38:00,791] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 11:38:00,791] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:4e234f9ab48a328122dfb6b0bbe19dcb
+[2025-05-26 11:38:00,791] [    INFO] main.py:2420 - Total chat request processing time: 8.7041 seconds.
+[2025-05-26 11:39:23,355] [    INFO] main.py:2134 - Received chat request: '네오오토 사내 규칙이 뭐야?', Category: '메뉴얼', History items: 10
+[2025-05-26 11:39:23,424] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0601 seconds. Found 10 docs.
+[2025-05-26 11:39:23,425] [    INFO] main.py:2176 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 11:39:23,469] [    INFO] main.py:2185 - Document reranking completed in 0.0433 seconds. Reranked to 4 docs.
+[2025-05-26 11:39:23,469] [    INFO] main.py:2192 - Using top 4 docs for LLM context.
+[2025-05-26 11:39:23,469] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:39:23,472] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:39:35,254] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 933. Time: 11.7824s
+[2025-05-26 11:39:35,255] [    INFO] main.py:2371 - 인용된 소스 수: 3/4
+[2025-05-26 11:39:35,255] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:6577aa55d44765dd283db8363c382ede
+[2025-05-26 11:39:35,255] [    INFO] main.py:2420 - Total chat request processing time: 11.8997 seconds.
+[2025-05-26 11:41:00,542] [    INFO] main.py:2134 - Received chat request: '개인 결혼시 휴가는 몇일이야?', Category: '메뉴얼', History items: 10
+[2025-05-26 11:41:00,612] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0606 seconds. Found 10 docs.
+[2025-05-26 11:41:00,613] [    INFO] main.py:2176 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 11:41:00,663] [    INFO] main.py:2185 - Document reranking completed in 0.0504 seconds. Reranked to 3 docs.
+[2025-05-26 11:41:00,663] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:41:00,663] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:41:00,667] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:41:02,630] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 118. Time: 1.9625s
+[2025-05-26 11:41:02,630] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 11:41:02,630] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:5b3a193bf09fdfaf96a9b2aec8f14f00
+[2025-05-26 11:41:02,630] [    INFO] main.py:2420 - Total chat request processing time: 2.0880 seconds.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 11:45:01,870] [    INFO] main.py:2134 - Received chat request: '개인 결혼시 휴가는 몇일이야?', Category: '메뉴얼', History items: 10
+[2025-05-26 11:45:01,955] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0753 seconds. Found 10 docs.
+[2025-05-26 11:45:01,955] [    INFO] main.py:2176 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 11:45:02,005] [    INFO] main.py:2185 - Document reranking completed in 0.0500 seconds. Reranked to 3 docs.
+[2025-05-26 11:45:02,006] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:45:02,006] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:45:02,008] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:45:05,151] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 263. Time: 3.1430s
+[2025-05-26 11:45:05,151] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 11:45:05,152] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:5b3a193bf09fdfaf96a9b2aec8f14f00
+[2025-05-26 11:45:05,152] [    INFO] main.py:2420 - Total chat request processing time: 3.2813 seconds.
+[2025-05-26 11:45:49,616] [    INFO] main.py:2134 - Received chat request: '개인 VM 생성 절차에 대해서 알려줘', Category: '메뉴얼', History items: 10
+[2025-05-26 11:45:49,688] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0604 seconds. Found 10 docs.
+[2025-05-26 11:45:49,689] [    INFO] main.py:2176 - Search enhancement completed in 0.0005 seconds.
+[2025-05-26 11:45:49,730] [    INFO] main.py:2185 - Document reranking completed in 0.0408 seconds. Reranked to 3 docs.
+[2025-05-26 11:45:49,730] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:45:49,730] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:45:49,733] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:45:58,840] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 894. Time: 9.1071s
+[2025-05-26 11:45:58,841] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 11:45:58,841] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:4e234f9ab48a328122dfb6b0bbe19dcb
+[2025-05-26 11:45:58,841] [    INFO] main.py:2420 - Total chat request processing time: 9.2246 seconds.
+[2025-05-26 11:48:15,276] [    INFO] main.py:2134 - Received chat request: 'VM 삭제 시 동작하지 않는데 해결방법 알려줘.', Category: '메뉴얼', History items: 10
+[2025-05-26 11:48:15,345] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0602 seconds. Found 10 docs.
+[2025-05-26 11:48:15,346] [    INFO] main.py:2176 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 11:48:15,393] [    INFO] main.py:2185 - Document reranking completed in 0.0473 seconds. Reranked to 4 docs.
+[2025-05-26 11:48:15,393] [    INFO] main.py:2192 - Using top 4 docs for LLM context.
+[2025-05-26 11:48:15,393] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:48:15,397] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:48:20,743] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 487. Time: 5.3465s
+[2025-05-26 11:48:20,743] [    INFO] main.py:2371 - 인용된 소스 수: 0/4
+[2025-05-26 11:48:20,744] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:48bd1b0f4c713e76eb589f31dbfa281f
+[2025-05-26 11:48:20,744] [    INFO] main.py:2420 - Total chat request processing time: 5.4680 seconds.
+[2025-05-26 11:51:00,758] [    INFO] main.py:2134 - Received chat request: '개인 VM 생성 절차에 대해서 알려줘', Category: '메뉴얼', History items: 10
+[2025-05-26 11:51:00,829] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0616 seconds. Found 10 docs.
+[2025-05-26 11:51:00,829] [    INFO] main.py:2176 - Search enhancement completed in 0.0004 seconds.
+[2025-05-26 11:51:00,871] [    INFO] main.py:2185 - Document reranking completed in 0.0416 seconds. Reranked to 3 docs.
+[2025-05-26 11:51:00,871] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:51:00,871] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:51:00,874] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:51:10,857] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 894. Time: 9.9828s
+[2025-05-26 11:51:10,857] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 11:51:10,857] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:4e234f9ab48a328122dfb6b0bbe19dcb
+[2025-05-26 11:51:10,857] [    INFO] main.py:2420 - Total chat request processing time: 10.0991 seconds.
+[2025-05-26 11:51:17,718] [    INFO] main.py:2134 - Received chat request: '개인 VM 생성 절차에 대해서 알려줘', Category: '메뉴얼', History items: 10
+[2025-05-26 11:51:17,759] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0280 seconds. Found 10 docs.
+[2025-05-26 11:51:17,759] [    INFO] main.py:2176 - Search enhancement completed in 0.0005 seconds.
+[2025-05-26 11:51:17,800] [    INFO] main.py:2185 - Document reranking completed in 0.0409 seconds. Reranked to 3 docs.
+[2025-05-26 11:51:17,800] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:51:17,801] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:51:17,805] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:51:27,192] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 904. Time: 9.3876s
+[2025-05-26 11:51:27,192] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 11:51:27,193] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:4e234f9ab48a328122dfb6b0bbe19dcb
+[2025-05-26 11:51:27,193] [    INFO] main.py:2420 - Total chat request processing time: 9.4745 seconds.
+[2025-05-26 11:51:41,917] [    INFO] main.py:2134 - Received chat request: '개인 VM은 어떻게 만들어?', Category: '메뉴얼', History items: 10
+[2025-05-26 11:51:41,957] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0280 seconds. Found 10 docs.
+[2025-05-26 11:51:41,958] [    INFO] main.py:2176 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 11:51:42,007] [    INFO] main.py:2185 - Document reranking completed in 0.0494 seconds. Reranked to 3 docs.
+[2025-05-26 11:51:42,007] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:51:42,007] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:51:42,012] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:51:51,430] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 907. Time: 9.4184s
+[2025-05-26 11:51:51,430] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 11:51:51,431] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:8822d5bf8ae8c097feb53b72ca585e2a
+[2025-05-26 11:51:51,431] [    INFO] main.py:2420 - Total chat request processing time: 9.5135 seconds.
+[2025-05-26 11:52:21,993] [    INFO] main.py:2134 - Received chat request: '개인 브이엠은 어떻게 생성해?', Category: '메뉴얼', History items: 10
+[2025-05-26 11:52:22,065] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0604 seconds. Found 10 docs.
+[2025-05-26 11:52:22,066] [    INFO] main.py:2176 - Search enhancement completed in 0.0005 seconds.
+[2025-05-26 11:52:22,107] [    INFO] main.py:2185 - Document reranking completed in 0.0413 seconds. Reranked to 3 docs.
+[2025-05-26 11:52:22,107] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:52:22,107] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:52:22,111] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:52:31,642] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 907. Time: 9.5301s
+[2025-05-26 11:52:31,642] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 11:52:31,642] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:fe924ac3ee6a2235ef5c988fe5ef1c0f
+[2025-05-26 11:52:31,642] [    INFO] main.py:2420 - Total chat request processing time: 9.6491 seconds.
+[2025-05-26 11:54:04,744] [    INFO] main.py:2134 - Received chat request: '취업규칙에서 특별청원휴가 종류에 대해서 표로 답변해줘', Category: '메뉴얼', History items: 10
+[2025-05-26 11:54:04,813] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0597 seconds. Found 10 docs.
+[2025-05-26 11:54:04,814] [    INFO] main.py:2176 - Search enhancement completed in 0.0008 seconds.
+[2025-05-26 11:54:04,864] [    INFO] main.py:2185 - Document reranking completed in 0.0497 seconds. Reranked to 3 docs.
+[2025-05-26 11:54:04,864] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 11:54:04,864] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 11:54:04,868] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 11:54:15,386] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 1301. Time: 10.5182s
+[2025-05-26 11:54:15,386] [    INFO] main.py:2371 - 인용된 소스 수: 1/3
+[2025-05-26 11:54:15,387] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:d9a63920eacc7736d8fed1047ce97be3
+[2025-05-26 11:54:15,387] [    INFO] main.py:2420 - Total chat request processing time: 10.6423 seconds.
+[2025-05-26 12:01:42,297] [    INFO] main.py:2134 - Received chat request: '차세대공증시스템에서  망분리 구축사업 수행예산은 얼마야?', Category: '메뉴얼', History items: 10
+[2025-05-26 12:01:42,366] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0596 seconds. Found 10 docs.
+[2025-05-26 12:01:42,367] [    INFO] main.py:2176 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 12:01:42,417] [    INFO] main.py:2185 - Document reranking completed in 0.0498 seconds. Reranked to 3 docs.
+[2025-05-26 12:01:42,417] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:01:42,417] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 12:01:42,421] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:01:46,794] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 255. Time: 4.3725s
+[2025-05-26 12:01:46,794] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 12:01:46,794] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:f84ca3de5d1d75ff9be5b5bffc74032a
+[2025-05-26 12:01:46,794] [    INFO] main.py:2420 - Total chat request processing time: 4.4972 seconds.
+[2025-05-26 12:03:48,516] [    INFO] main.py:2134 - Received chat request: '개인 브이엠 장애 유형은 어떤것들이 있어?', Category: '메뉴얼', History items: 10
+[2025-05-26 12:03:48,595] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0698 seconds. Found 10 docs.
+[2025-05-26 12:03:48,596] [    INFO] main.py:2176 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 12:03:48,638] [    INFO] main.py:2185 - Document reranking completed in 0.0428 seconds. Reranked to 3 docs.
+[2025-05-26 12:03:48,638] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:03:48,639] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 12:03:48,643] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:03:59,641] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 979. Time: 10.9978s
+[2025-05-26 12:03:59,641] [    INFO] main.py:2371 - 인용된 소스 수: 1/3
+[2025-05-26 12:03:59,641] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:f7334255f603c9c3eea3f7cd47a55e50
+[2025-05-26 12:03:59,641] [    INFO] main.py:2420 - Total chat request processing time: 11.1251 seconds.
+[2025-05-26 12:04:51,526] [    INFO] main.py:2134 - Received chat request: '개인 브이엠 장애 유형은 어떤것들이 있어?', Category: '메뉴얼', History items: 1
+[2025-05-26 12:04:51,596] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0605 seconds. Found 10 docs.
+[2025-05-26 12:04:51,597] [    INFO] main.py:2176 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 12:04:51,640] [    INFO] main.py:2185 - Document reranking completed in 0.0431 seconds. Reranked to 3 docs.
+[2025-05-26 12:04:51,640] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:04:51,640] [    INFO] main.py:2207 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 12:04:51,642] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:04:57,755] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 520. Time: 6.1130s
+[2025-05-26 12:04:57,755] [    INFO] main.py:2371 - 인용된 소스 수: 1/3
+[2025-05-26 12:04:57,755] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:f7334255f603c9c3eea3f7cd47a55e50
+[2025-05-26 12:04:57,756] [    INFO] main.py:2420 - Total chat request processing time: 6.2290 seconds.
+[2025-05-26 12:05:31,359] [    INFO] main.py:2134 - Received chat request: '차세대공증시스템에서  망분리 구축사업 수행예산은 얼마야?', Category: '메뉴얼', History items: 1
+[2025-05-26 12:05:31,428] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0595 seconds. Found 10 docs.
+[2025-05-26 12:05:31,428] [    INFO] main.py:2176 - Search enhancement completed in 0.0004 seconds.
+[2025-05-26 12:05:31,478] [    INFO] main.py:2185 - Document reranking completed in 0.0495 seconds. Reranked to 3 docs.
+[2025-05-26 12:05:31,478] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:05:31,478] [    INFO] main.py:2207 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 12:05:31,480] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:05:35,064] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 242. Time: 3.5837s
+[2025-05-26 12:05:35,064] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 12:05:35,064] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:f84ca3de5d1d75ff9be5b5bffc74032a
+[2025-05-26 12:05:35,064] [    INFO] main.py:2420 - Total chat request processing time: 3.7052 seconds.
+[2025-05-26 12:06:12,153] [    INFO] main.py:2134 - Received chat request: '개인 브이엠은 어떻게 생성해?', Category: '메뉴얼', History items: 1
+[2025-05-26 12:06:12,221] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0588 seconds. Found 10 docs.
+[2025-05-26 12:06:12,222] [    INFO] main.py:2176 - Search enhancement completed in 0.0004 seconds.
+[2025-05-26 12:06:12,263] [    INFO] main.py:2185 - Document reranking completed in 0.0417 seconds. Reranked to 3 docs.
+[2025-05-26 12:06:12,263] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:06:12,264] [    INFO] main.py:2207 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 12:06:12,265] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:06:14,309] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 149. Time: 2.0441s
+[2025-05-26 12:06:14,309] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 12:06:14,309] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:fe924ac3ee6a2235ef5c988fe5ef1c0f
+[2025-05-26 12:06:14,309] [    INFO] main.py:2420 - Total chat request processing time: 2.1562 seconds.
+[2025-05-26 12:06:57,578] [    INFO] main.py:2134 - Received chat request: '취업규칙에서 특별청원휴가 종류에 대해서 표로 답변해줘', Category: '메뉴얼', History items: 1
+[2025-05-26 12:06:57,661] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0735 seconds. Found 10 docs.
+[2025-05-26 12:06:57,662] [    INFO] main.py:2176 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 12:06:57,712] [    INFO] main.py:2185 - Document reranking completed in 0.0499 seconds. Reranked to 3 docs.
+[2025-05-26 12:06:57,712] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:06:57,712] [    INFO] main.py:2207 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 12:06:57,714] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:07:06,417] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 998. Time: 8.7038s
+[2025-05-26 12:07:06,418] [    INFO] main.py:2371 - 인용된 소스 수: 1/3
+[2025-05-26 12:07:06,418] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:d9a63920eacc7736d8fed1047ce97be3
+[2025-05-26 12:07:06,418] [    INFO] main.py:2420 - Total chat request processing time: 8.8394 seconds.
+[2025-05-26 12:09:47,709] [    INFO] main.py:2134 - Received chat request: '개인 VM은 어떻게 만들어?', Category: '메뉴얼', History items: 1
+[2025-05-26 12:09:47,777] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0590 seconds. Found 10 docs.
+[2025-05-26 12:09:47,778] [    INFO] main.py:2176 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 12:09:47,828] [    INFO] main.py:2185 - Document reranking completed in 0.0504 seconds. Reranked to 3 docs.
+[2025-05-26 12:09:47,828] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:09:47,829] [    INFO] main.py:2207 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 12:09:47,830] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:09:52,611] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 409. Time: 4.7806s
+[2025-05-26 12:09:52,611] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 12:09:52,611] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:8822d5bf8ae8c097feb53b72ca585e2a
+[2025-05-26 12:09:52,611] [    INFO] main.py:2420 - Total chat request processing time: 4.9020 seconds.
+[2025-05-26 12:10:28,618] [    INFO] main.py:2134 - Received chat request: '개인 VM은 어떻게 만들어?', Category: '메뉴얼', History items: 1
+[2025-05-26 12:10:28,702] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0744 seconds. Found 10 docs.
+[2025-05-26 12:10:28,703] [    INFO] main.py:2176 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 12:10:28,753] [    INFO] main.py:2185 - Document reranking completed in 0.0494 seconds. Reranked to 3 docs.
+[2025-05-26 12:10:28,753] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:10:28,753] [    INFO] main.py:2207 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 12:10:28,754] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:10:31,977] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 274. Time: 3.2222s
+[2025-05-26 12:10:31,977] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 12:10:31,977] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:8822d5bf8ae8c097feb53b72ca585e2a
+[2025-05-26 12:10:31,977] [    INFO] main.py:2420 - Total chat request processing time: 3.3587 seconds.
+[2025-05-26 12:10:37,145] [    INFO] main.py:2134 - Received chat request: '개인 브이엠 장애 유형은 어떤것들이 있어?', Category: '메뉴얼', History items: 3
+[2025-05-26 12:10:37,184] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0300 seconds. Found 10 docs.
+[2025-05-26 12:10:37,185] [    INFO] main.py:2176 - Search enhancement completed in 0.0005 seconds.
+[2025-05-26 12:10:37,228] [    INFO] main.py:2185 - Document reranking completed in 0.0429 seconds. Reranked to 3 docs.
+[2025-05-26 12:10:37,228] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 12:10:37,228] [    INFO] main.py:2207 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 12:10:37,230] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 12:10:40,799] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 317. Time: 3.5690s
+[2025-05-26 12:10:40,799] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 12:10:40,799] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:f7334255f603c9c3eea3f7cd47a55e50
+[2025-05-26 12:10:40,799] [    INFO] main.py:2420 - Total chat request processing time: 3.6544 seconds.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 13:10:47,522] [    INFO] main.py:2134 - Received chat request: '보안서약서', Category: '메뉴얼', History items: 1
+[2025-05-26 13:10:47,596] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0630 seconds. Found 10 docs.
+[2025-05-26 13:10:47,597] [    INFO] main.py:2176 - Search enhancement completed in 0.0004 seconds.
+[2025-05-26 13:10:47,646] [    INFO] main.py:2185 - Document reranking completed in 0.0493 seconds. Reranked to 4 docs.
+[2025-05-26 13:10:47,646] [    INFO] main.py:2192 - Using top 4 docs for LLM context.
+[2025-05-26 13:10:47,646] [    INFO] main.py:2207 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 13:10:47,649] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 13:10:59,205] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 941. Time: 11.5551s
+[2025-05-26 13:10:59,205] [    INFO] main.py:2371 - 인용된 소스 수: 2/4
+[2025-05-26 13:10:59,205] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:8f3313a15361615a0956043ad125af0b
+[2025-05-26 13:10:59,205] [    INFO] main.py:2420 - Total chat request processing time: 11.6825 seconds.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1205, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 13:33:20,588] [    INFO] main.py:2134 - Received chat request: '로그인 시 비밀번호 3회 이상 오류 발생했다고 나오는데 어떻게 해야해?', Category: '메뉴얼', History items: 7
+[2025-05-26 13:33:20,658] [    INFO] main.py:2162 - Initial document retrieval completed in 0.0604 seconds. Found 10 docs.
+[2025-05-26 13:33:20,659] [    INFO] main.py:2176 - Search enhancement completed in 0.0011 seconds.
+[2025-05-26 13:33:20,709] [    INFO] main.py:2185 - Document reranking completed in 0.0497 seconds. Reranked to 3 docs.
+[2025-05-26 13:33:20,709] [    INFO] main.py:2192 - Using top 3 docs for LLM context.
+[2025-05-26 13:33:20,709] [    INFO] main.py:2207 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 13:33:20,712] [    INFO] main.py:2249 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 13:33:27,510] [    INFO] main.py:2367 - LLM generation stream finished. Total chars: 583. Time: 6.7976s
+[2025-05-26 13:33:27,510] [    INFO] main.py:2371 - 인용된 소스 수: 0/3
+[2025-05-26 13:33:27,510] [    INFO] main.py:2404 - 스트리밍 응답 캐싱 완료: chat:b4bad5ea38826ca0858fbacd55cb7461
+[2025-05-26 13:33:27,510] [    INFO] main.py:2420 - Total chat request processing time: 6.9220 seconds.
+WARNING:  WatchFiles detected changes in 'app/services/session_service.py'. Reloading...
+WARNING:  WatchFiles detected changes in 'app/services/session_service.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.41s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.53s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.48s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.06it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.14s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.46s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.60s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.62s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.05s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.24s/it]
+INFO:     Started server process [2528281]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.43s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.52s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.46s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.07it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.13s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.37s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:03,  1.50s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.54s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.01it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.18s/it]
+INFO:     Started server process [2528583]
+INFO:     Waiting for application startup.
+[2025-05-26 13:37:26,524] [    INFO] main.py:1785 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.42s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.52s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.46s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.07it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.13s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.38s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:03,  1.51s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.53s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.02it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.17s/it]
+INFO:     Started server process [2529732]
+INFO:     Waiting for application startup.
+[2025-05-26 13:42:38,469] [    INFO] main.py:1785 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 13:52:17,802] [    INFO] main.py:2161 - Received chat request: '로그인 횟수', Category: '메뉴얼', History items: 1
+[2025-05-26 13:52:18,059] [    INFO] main.py:2189 - Initial document retrieval completed in 0.2486 seconds. Found 10 docs.
+[2025-05-26 13:52:18,061] [    INFO] main.py:2203 - Search enhancement completed in 0.0014 seconds.
+[2025-05-26 13:52:18,163] [    INFO] main.py:2212 - Document reranking completed in 0.1021 seconds. Reranked to 3 docs.
+[2025-05-26 13:52:18,163] [    INFO] main.py:2219 - Using top 3 docs for LLM context.
+[2025-05-26 13:52:18,170] [    INFO] main.py:2234 - Prompt generation completed in 0.0069 seconds.
+[2025-05-26 13:52:18,172] [    INFO] main.py:2276 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 13:52:19,362] [    INFO] main.py:2394 - LLM generation stream finished. Total chars: 68. Time: 1.1905s
+[2025-05-26 13:52:19,362] [    INFO] main.py:2398 - 인용된 소스 수: 0/3
+[2025-05-26 13:52:19,363] [    INFO] main.py:2431 - 스트리밍 응답 캐싱 완료: chat:79934307487966ce87473819fb79d4aa
+[2025-05-26 13:52:19,363] [    INFO] main.py:2447 - Total chat request processing time: 1.5609 seconds.
+[2025-05-26 13:52:38,915] [    INFO] main.py:2161 - Received chat request: '보안서약서 3조', Category: '메뉴얼', History items: 1
+[2025-05-26 13:52:38,995] [    INFO] main.py:2189 - Initial document retrieval completed in 0.0713 seconds. Found 10 docs.
+[2025-05-26 13:52:38,996] [    INFO] main.py:2203 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 13:52:39,046] [    INFO] main.py:2212 - Document reranking completed in 0.0504 seconds. Reranked to 3 docs.
+[2025-05-26 13:52:39,046] [    INFO] main.py:2219 - Using top 3 docs for LLM context.
+[2025-05-26 13:52:39,047] [    INFO] main.py:2234 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 13:52:39,049] [    INFO] main.py:2276 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 13:52:40,905] [    INFO] main.py:2394 - LLM generation stream finished. Total chars: 108. Time: 1.8555s
+[2025-05-26 13:52:40,905] [    INFO] main.py:2398 - 인용된 소스 수: 1/3
+[2025-05-26 13:52:40,905] [    INFO] main.py:2431 - 스트리밍 응답 캐싱 완료: chat:cbc02465d3aa5765495e49b4e6347e9d
+[2025-05-26 13:52:40,905] [    INFO] main.py:2447 - Total chat request processing time: 1.9900 seconds.
+[2025-05-26 13:52:48,357] [    INFO] main.py:2161 - Received chat request: '보안서약서 2조', Category: '메뉴얼', History items: 3
+[2025-05-26 13:52:48,394] [    INFO] main.py:2189 - Initial document retrieval completed in 0.0288 seconds. Found 10 docs.
+[2025-05-26 13:52:48,395] [    INFO] main.py:2203 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 13:52:48,445] [    INFO] main.py:2212 - Document reranking completed in 0.0501 seconds. Reranked to 3 docs.
+[2025-05-26 13:52:48,445] [    INFO] main.py:2219 - Using top 3 docs for LLM context.
+[2025-05-26 13:52:48,446] [    INFO] main.py:2234 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 13:52:48,447] [    INFO] main.py:2276 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 13:52:51,171] [    INFO] main.py:2394 - LLM generation stream finished. Total chars: 180. Time: 2.7234s
+[2025-05-26 13:52:51,171] [    INFO] main.py:2398 - 인용된 소스 수: 2/3
+[2025-05-26 13:52:51,171] [    INFO] main.py:2431 - 스트리밍 응답 캐싱 완료: chat:19392f03b78efcba441e4d3043ffc05d
+[2025-05-26 13:52:51,171] [    INFO] main.py:2447 - Total chat request processing time: 2.8147 seconds.
+[2025-05-26 13:52:54,692] [    INFO] main.py:2161 - Received chat request: '보안서약서 제 1조', Category: '메뉴얼', History items: 1
+[2025-05-26 13:52:54,729] [    INFO] main.py:2189 - Initial document retrieval completed in 0.0288 seconds. Found 10 docs.
+[2025-05-26 13:52:54,730] [    INFO] main.py:2203 - Search enhancement completed in 0.0005 seconds.
+[2025-05-26 13:52:54,780] [    INFO] main.py:2212 - Document reranking completed in 0.0503 seconds. Reranked to 3 docs.
+[2025-05-26 13:52:54,781] [    INFO] main.py:2219 - Using top 3 docs for LLM context.
+[2025-05-26 13:52:54,781] [    INFO] main.py:2234 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 13:52:54,783] [    INFO] main.py:2276 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 13:53:03,310] [ WARNING] main.py:2444 - LLM generation thread did not terminate gracefully.
+[2025-05-26 13:53:03,310] [    INFO] main.py:2447 - Total chat request processing time: 8.6185 seconds.
+[2025-05-26 13:53:56,363] [    INFO] main.py:2161 - Received chat request: '박경수', Category: '메뉴얼', History items: 1
+[2025-05-26 13:53:56,435] [    INFO] main.py:2189 - Initial document retrieval completed in 0.0626 seconds. Found 10 docs.
+[2025-05-26 13:53:56,436] [    INFO] main.py:2203 - Search enhancement completed in 0.0005 seconds.
+[2025-05-26 13:53:56,485] [    INFO] main.py:2212 - Document reranking completed in 0.0492 seconds. Reranked to 3 docs.
+[2025-05-26 13:53:56,485] [    INFO] main.py:2219 - Using top 3 docs for LLM context.
+[2025-05-26 13:53:56,485] [    INFO] main.py:2234 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 13:53:56,486] [    INFO] main.py:2276 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 13:53:58,170] [    INFO] main.py:2394 - LLM generation stream finished. Total chars: 148. Time: 1.6833s
+[2025-05-26 13:53:58,170] [    INFO] main.py:2398 - 인용된 소스 수: 0/3
+[2025-05-26 13:53:58,170] [    INFO] main.py:2431 - 스트리밍 응답 캐싱 완료: chat:199608026eefe38d77f4d5db4488a8d9
+[2025-05-26 13:53:58,170] [    INFO] main.py:2447 - Total chat request processing time: 1.8065 seconds.
+[2025-05-26 13:54:07,111] [    INFO] main.py:2161 - Received chat request: '한인섭', Category: '메뉴얼', History items: 1
+[2025-05-26 13:54:07,150] [    INFO] main.py:2189 - Initial document retrieval completed in 0.0299 seconds. Found 10 docs.
+[2025-05-26 13:54:07,150] [    INFO] main.py:2203 - Search enhancement completed in 0.0004 seconds.
+[2025-05-26 13:54:07,199] [    INFO] main.py:2212 - Document reranking completed in 0.0488 seconds. Reranked to 3 docs.
+[2025-05-26 13:54:07,199] [    INFO] main.py:2219 - Using top 3 docs for LLM context.
+[2025-05-26 13:54:07,200] [    INFO] main.py:2234 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 13:54:07,201] [    INFO] main.py:2276 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 13:54:08,279] [    INFO] main.py:2394 - LLM generation stream finished. Total chars: 87. Time: 1.0784s
+[2025-05-26 13:54:08,279] [    INFO] main.py:2398 - 인용된 소스 수: 0/3
+[2025-05-26 13:54:08,280] [    INFO] main.py:2431 - 스트리밍 응답 캐싱 완료: chat:6d6d566373c42a27bf7326833e2fecd1
+[2025-05-26 13:54:08,280] [    INFO] main.py:2447 - Total chat request processing time: 1.1687 seconds.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1224, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:03:17,695] [    INFO] main.py:2161 - Received chat request: '하이', Category: '메뉴얼', History items: 1
+[2025-05-26 14:03:17,779] [    INFO] main.py:2189 - Initial document retrieval completed in 0.0753 seconds. Found 10 docs.
+[2025-05-26 14:03:17,780] [    INFO] main.py:2203 - Search enhancement completed in 0.0004 seconds.
+[2025-05-26 14:03:17,829] [    INFO] main.py:2212 - Document reranking completed in 0.0494 seconds. Reranked to 3 docs.
+[2025-05-26 14:03:17,829] [    INFO] main.py:2219 - Using top 3 docs for LLM context.
+[2025-05-26 14:03:17,830] [    INFO] main.py:2234 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 14:03:17,830] [    INFO] main.py:2276 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:03:18,215] [    INFO] main.py:2394 - LLM generation stream finished. Total chars: 18. Time: 0.3849s
+[2025-05-26 14:03:18,215] [    INFO] main.py:2398 - 인용된 소스 수: 0/3
+[2025-05-26 14:03:18,215] [    INFO] main.py:2431 - 스트리밍 응답 캐싱 완료: chat:fbe323c33dce68bca707bebac8b1ffe3
+[2025-05-26 14:03:18,215] [    INFO] main.py:2447 - Total chat request processing time: 0.5203 seconds.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.42s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.52s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.46s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.07it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.13s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.37s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:03,  1.50s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.52s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.02it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.17s/it]
+INFO:     Started server process [2542403]
+INFO:     Waiting for application startup.
+[2025-05-26 14:12:13,008] [    INFO] main.py:1786 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.40s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:03,  1.51s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.47s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.07it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.13s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.38s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.49s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.02it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+INFO:     Started server process [2543018]
+INFO:     Waiting for application startup.
+[2025-05-26 14:14:33,666] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.41s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:03,  1.51s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.46s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.08it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.13s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.40s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.54s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.55s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.00s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.19s/it]
+INFO:     Started server process [2543192]
+INFO:     Waiting for application startup.
+[2025-05-26 14:15:12,587] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.46s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.55s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.50s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.05it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.38s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.50s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.52s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.02it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.17s/it]
+INFO:     Started server process [2543623]
+INFO:     Waiting for application startup.
+[2025-05-26 14:16:55,858] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Process SpawnProcess-10:
+Traceback (most recent call last):
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 2218
+    yield f"data: {json.dumps({'token': '관련 문서를 찾을 수 없습니다. 다른 질문을 시도해 주세요.')}\n\n"
+                                                                                  ^
+SyntaxError: f-string: closing parenthesis ')' does not match opening parenthesis '{'
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Process SpawnProcess-11:
+Traceback (most recent call last):
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 2218
+    yield f"data: {json.dumps({'token': '관련 문서를 찾을 수 없습니다. 다른 질문을 시도해 주세요.')}\n\n"
+                                                                                  ^
+SyntaxError: f-string: closing parenthesis ')' does not match opening parenthesis '{'
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Process SpawnProcess-12:
+Traceback (most recent call last):
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 2218
+    yield f"data: {json.dumps({'token': '관련 문서를 찾을 수 없습니다. 다른 질문을 시도해 주세요.')}\n\n"
+                                                                                  ^
+SyntaxError: f-string: closing parenthesis ')' does not match opening parenthesis '{'
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Process SpawnProcess-13:
+Traceback (most recent call last):
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/test_code/test01/rag-chatbot/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/root/.pyenv/versions/3.10.14/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 2218
+    yield f"data: {json.dumps({'token': '관련 문서를 찾을 수 없습니다. 다른 질문을 시도해 주세요.')}\n\n"
+                                                                                  ^
+SyntaxError: f-string: closing parenthesis ')' does not match opening parenthesis '{'
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.48s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.59s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.53s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.03it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.18s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.45s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.58s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.61s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.04s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.23s/it]
+INFO:     Started server process [2546247]
+INFO:     Waiting for application startup.
+[2025-05-26 14:26:11,552] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.45s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.52s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.48s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.06it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.14s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.38s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.49s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.52s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.02it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+INFO:     Started server process [2546800]
+INFO:     Waiting for application startup.
+[2025-05-26 14:27:17,209] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+[2025-05-26 14:29:51,645] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235133370
+[2025-05-26 14:29:51,646] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235133370
+[2025-05-26 14:29:51,646] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235133370.json
+[2025-05-26 14:29:51,646] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235133370
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:29:52,144] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235145266
+[2025-05-26 14:29:52,144] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235145266
+[2025-05-26 14:29:52,144] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235145266.json
+[2025-05-26 14:29:52,144] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235145266
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:29:52,498] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235145266
+[2025-05-26 14:29:52,498] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235145266
+[2025-05-26 14:29:52,498] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235145266.json
+[2025-05-26 14:29:52,498] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235145266
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:29:52,755] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235170859
+[2025-05-26 14:29:52,755] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235170859
+[2025-05-26 14:29:52,755] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235170859.json
+[2025-05-26 14:29:52,755] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235170859
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:29:53,035] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235133370
+[2025-05-26 14:29:53,035] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235133370
+[2025-05-26 14:29:53,035] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235133370.json
+[2025-05-26 14:29:53,035] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235133370
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:29:53,281] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235133370
+[2025-05-26 14:29:53,282] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235133370
+[2025-05-26 14:29:53,282] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235133370.json
+[2025-05-26 14:29:53,282] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235133370
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:29:53,540] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235126924
+[2025-05-26 14:29:53,540] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235126924
+[2025-05-26 14:29:53,540] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235126924.json
+[2025-05-26 14:29:53,540] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235126924
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:29:54,096] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235133370
+[2025-05-26 14:29:54,097] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235133370
+[2025-05-26 14:29:54,097] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235133370.json
+[2025-05-26 14:29:54,097] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235133370
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:31:17,545] [    INFO] main.py:2185 - Received chat request: '보안서약서 2조', Category: '메뉴얼', History items: 1
+[2025-05-26 14:31:17,794] [    INFO] main.py:2213 - Initial document retrieval completed in 0.2401 seconds. Found 10 docs.
+[2025-05-26 14:31:17,796] [    INFO] main.py:2229 - Search enhancement completed in 0.0013 seconds.
+[2025-05-26 14:31:17,906] [    INFO] main.py:2238 - Document reranking completed in 0.1105 seconds. Reranked to 3 docs.
+[2025-05-26 14:31:17,906] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:31:17,913] [    INFO] main.py:2260 - Prompt generation completed in 0.0067 seconds.
+[2025-05-26 14:31:17,916] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:31:20,542] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 166. Time: 2.6264s
+[2025-05-26 14:31:20,542] [    INFO] main.py:2424 - 인용된 소스 수: 2/3
+[2025-05-26 14:31:20,543] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:19392f03b78efcba441e4d3043ffc05d
+[2025-05-26 14:31:20,543] [    INFO] main.py:2473 - Total chat request processing time: 2.9979 seconds.
+[2025-05-26 14:31:30,790] [    INFO] main.py:2185 - Received chat request: '보안서약서 2조 및 4조 내용 설명해줘', Category: '메뉴얼', History items: 3
+[2025-05-26 14:31:30,827] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0282 seconds. Found 10 docs.
+[2025-05-26 14:31:30,828] [    INFO] main.py:2229 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 14:31:30,878] [    INFO] main.py:2238 - Document reranking completed in 0.0504 seconds. Reranked to 3 docs.
+[2025-05-26 14:31:30,879] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:31:30,879] [    INFO] main.py:2260 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 14:31:30,881] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:31:35,015] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 294. Time: 4.1342s
+[2025-05-26 14:31:35,015] [    INFO] main.py:2424 - 인용된 소스 수: 2/3
+[2025-05-26 14:31:35,015] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:99bf8cac302840ca9082f34e9ad90dc5
+[2025-05-26 14:31:35,016] [    INFO] main.py:2473 - Total chat request processing time: 4.2256 seconds.
+[2025-05-26 14:31:50,279] [    INFO] main.py:2185 - Received chat request: '원격업무지원시스템에서 상담센터 업무 가능?', Category: '메뉴얼', History items: 5
+[2025-05-26 14:31:50,322] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0332 seconds. Found 10 docs.
+[2025-05-26 14:31:50,322] [    INFO] main.py:2229 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 14:31:50,373] [    INFO] main.py:2238 - Document reranking completed in 0.0503 seconds. Reranked to 3 docs.
+[2025-05-26 14:31:50,373] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:31:50,373] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 14:31:50,375] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:31:52,117] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 115. Time: 1.7413s
+[2025-05-26 14:31:52,117] [    INFO] main.py:2424 - 인용된 소스 수: 1/3
+[2025-05-26 14:31:52,117] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:5b1a72f6a67e883ad7f6fc05ab416d35
+[2025-05-26 14:31:52,117] [    INFO] main.py:2473 - Total chat request processing time: 1.8380 seconds.
+[2025-05-26 14:31:57,936] [    INFO] main.py:2185 - Received chat request: '로그인 횟수 3회', Category: '메뉴얼', History items: 7
+[2025-05-26 14:31:57,976] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0304 seconds. Found 10 docs.
+[2025-05-26 14:31:57,976] [    INFO] main.py:2229 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 14:31:58,020] [    INFO] main.py:2238 - Document reranking completed in 0.0438 seconds. Reranked to 3 docs.
+[2025-05-26 14:31:58,020] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:31:58,021] [    INFO] main.py:2260 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 14:31:58,023] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:31:59,518] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 102. Time: 1.4950s
+[2025-05-26 14:31:59,518] [    INFO] main.py:2424 - 인용된 소스 수: 0/3
+[2025-05-26 14:31:59,518] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:d4abb54f5ac17f2fe262b457472a2fef
+[2025-05-26 14:31:59,518] [    INFO] main.py:2473 - Total chat request processing time: 1.5820 seconds.
+[2025-05-26 14:32:16,929] [    INFO] main.py:2185 - Received chat request: '원격근무자 준수사항 및 위반 시 불이익에 대해 설명해줘', Category: '메뉴얼', History items: 9
+[2025-05-26 14:32:16,985] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0467 seconds. Found 10 docs.
+[2025-05-26 14:32:16,986] [    INFO] main.py:2229 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 14:32:17,036] [    INFO] main.py:2238 - Document reranking completed in 0.0503 seconds. Reranked to 3 docs.
+[2025-05-26 14:32:17,036] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:32:17,037] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 14:32:17,039] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:32:25,470] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 611. Time: 8.4312s
+[2025-05-26 14:32:25,470] [    INFO] main.py:2424 - 인용된 소스 수: 2/3
+[2025-05-26 14:32:25,471] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:72820dbf07f78e48c675636ed9d8fedf
+[2025-05-26 14:32:25,471] [    INFO] main.py:2473 - Total chat request processing time: 8.5412 seconds.
+[2025-05-26 14:32:38,007] [    INFO] main.py:2185 - Received chat request: '리소스 급증이 예상되는 시간대에 관리자가 미리 조정할 수 있는 방법과 VDI 환경에서 Windows 와 Linux 기반 데스크톱 운영의 차이점 및 최적화 방법을 설명해줘', Category: '메뉴얼', History items: 10
+[2025-05-26 14:32:38,045] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0290 seconds. Found 10 docs.
+[2025-05-26 14:32:38,047] [    INFO] main.py:2229 - Search enhancement completed in 0.0017 seconds.
+[2025-05-26 14:32:38,092] [    INFO] main.py:2238 - Document reranking completed in 0.0443 seconds. Reranked to 3 docs.
+[2025-05-26 14:32:38,092] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:32:38,092] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 14:32:38,095] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:32:48,625] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 884. Time: 10.5294s
+[2025-05-26 14:32:48,625] [    INFO] main.py:2424 - 인용된 소스 수: 2/3
+[2025-05-26 14:32:48,625] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:8941fb0684eacebeb03fa06acf67b289
+[2025-05-26 14:32:48,625] [    INFO] main.py:2473 - Total chat request processing time: 10.6176 seconds.
+[2025-05-26 14:33:03,141] [    INFO] main.py:2185 - Received chat request: 'Q1~Q5까지 질문과 답변으로 구분하여 리스트화해서 보여줘', Category: '메뉴얼', History items: 10
+[2025-05-26 14:33:03,180] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0292 seconds. Found 10 docs.
+[2025-05-26 14:33:03,180] [    INFO] main.py:2229 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 14:33:03,229] [    INFO] main.py:2238 - Document reranking completed in 0.0484 seconds. Reranked to 3 docs.
+[2025-05-26 14:33:03,229] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:33:03,229] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 14:33:03,232] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:33:11,937] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 687. Time: 8.7044s
+[2025-05-26 14:33:11,937] [    INFO] main.py:2424 - 인용된 소스 수: 1/3
+[2025-05-26 14:33:11,937] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:5e8368da9ccce66b7c724c22f4385a67
+[2025-05-26 14:33:11,937] [    INFO] main.py:2473 - Total chat request processing time: 8.7958 seconds.
+[2025-05-26 14:33:17,823] [    INFO] main.py:2185 - Received chat request: 'VM 삭제 시 동작하지 않을때 해결하는 방법과 VM 의 디스크를 늘리는 방법 설명해줘', Category: '메뉴얼', History items: 10
+[2025-05-26 14:33:17,860] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0283 seconds. Found 10 docs.
+[2025-05-26 14:33:17,861] [    INFO] main.py:2229 - Search enhancement completed in 0.0009 seconds.
+[2025-05-26 14:33:17,905] [    INFO] main.py:2238 - Document reranking completed in 0.0435 seconds. Reranked to 3 docs.
+[2025-05-26 14:33:17,905] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:33:17,905] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 14:33:17,909] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:33:22,114] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 332. Time: 4.2052s
+[2025-05-26 14:33:22,114] [    INFO] main.py:2424 - 인용된 소스 수: 1/3
+[2025-05-26 14:33:22,114] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:7fb024e7052b0363598bdc0904e37ab4
+[2025-05-26 14:33:22,114] [    INFO] main.py:2473 - Total chat request processing time: 4.2916 seconds.
+[2025-05-26 14:33:43,409] [    INFO] main.py:2185 - Received chat request: '특별청원휴가 종류 및 휴가일수에 대해 자세히 설명해줘', Category: '메뉴얼', History items: 10
+[2025-05-26 14:33:43,478] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0601 seconds. Found 10 docs.
+[2025-05-26 14:33:43,479] [    INFO] main.py:2229 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 14:33:43,529] [    INFO] main.py:2238 - Document reranking completed in 0.0500 seconds. Reranked to 3 docs.
+[2025-05-26 14:33:43,529] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:33:43,529] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 14:33:43,533] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:33:53,984] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 728. Time: 10.4507s
+[2025-05-26 14:33:53,984] [    INFO] main.py:2424 - 인용된 소스 수: 1/3
+[2025-05-26 14:33:53,984] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:5c4a13f40b1158f9f3f90a7ede615684
+[2025-05-26 14:33:53,984] [    INFO] main.py:2473 - Total chat request processing time: 10.5757 seconds.
+[2025-05-26 14:34:21,695] [    INFO] main.py:2185 - Received chat request: '중소기업유통센터 자료전송 장애 대응 프로세스 설명해줘', Category: '메뉴얼', History items: 10
+[2025-05-26 14:34:21,762] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0581 seconds. Found 10 docs.
+[2025-05-26 14:34:21,763] [    INFO] main.py:2229 - Search enhancement completed in 0.0007 seconds.
+[2025-05-26 14:34:21,816] [    INFO] main.py:2238 - Document reranking completed in 0.0528 seconds. Reranked to 3 docs.
+[2025-05-26 14:34:21,816] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 14:34:21,816] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 14:34:21,820] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 14:34:25,103] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235170859
+[2025-05-26 14:34:25,104] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235170859
+[2025-05-26 14:34:25,104] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235170859.json
+[2025-05-26 14:34:25,104] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235170859
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:34:27,900] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748237472233
+[2025-05-26 14:34:27,900] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748237472233
+[2025-05-26 14:34:27,900] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748237472233.json
+[2025-05-26 14:34:27,900] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748237472233
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:34:29,819] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 567. Time: 7.9992s
+[2025-05-26 14:34:29,819] [    INFO] main.py:2424 - 인용된 소스 수: 0/3
+[2025-05-26 14:34:29,820] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:733986a131c1e11ed223b9ed374a5d53
+[2025-05-26 14:34:29,820] [    INFO] main.py:2473 - Total chat request processing time: 8.1249 seconds.
+[2025-05-26 14:34:30,971] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235170859
+[2025-05-26 14:34:30,971] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235170859
+[2025-05-26 14:34:30,971] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235170859.json
+[2025-05-26 14:34:30,971] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235170859
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:34:32,472] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748237472233
+[2025-05-26 14:34:32,473] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748237472233
+[2025-05-26 14:34:32,473] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748237472233.json
+[2025-05-26 14:34:32,473] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748237472233
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:38:44,240] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748235170859
+[2025-05-26 14:38:44,240] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748235170859
+[2025-05-26 14:38:44,240] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748235170859.json
+[2025-05-26 14:38:44,240] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748235170859
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+[2025-05-26 14:38:44,849] [    INFO] main.py:1190 - 대화 불러오기 시도: user_id=user1, conversation_id=conv_1748237472233
+[2025-05-26 14:38:44,850] [ WARNING] main.py:1204 - Redis에서 대화를 찾을 수 없음: user1_conv_1748237472233
+[2025-05-26 14:38:44,850] [ WARNING] main.py:1214 - 파일 시스템에서 대화를 찾을 수 없음: app/conversations/user1_conv_1748237472233.json
+[2025-05-26 14:38:44,850] [   ERROR] main.py:1219 - 대화를 찾을 수 없음 (Redis 및 파일 시스템): user1_conv_1748237472233
+Traceback (most recent call last):
+  File "/home/test_code/test01/rag-chatbot/backend/app/main.py", line 1248, in load_conversation_endpoint
+    raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다.")
+fastapi.exceptions.HTTPException: 404: 대화를 찾을 수 없습니다.
+WARNING:  WatchFiles detected changes in 'app/services/session_service.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.41s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.50s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.44s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.09it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.12s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.36s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.47s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.49s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.04it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.15s/it]
+INFO:     Started server process [2557854]
+INFO:     Waiting for application startup.
+[2025-05-26 15:04:24,104] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/session_service.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.43s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.54s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.48s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.06it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.15s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.38s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:03,  1.51s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.54s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.01it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.18s/it]
+INFO:     Started server process [2557966]
+INFO:     Waiting for application startup.
+[2025-05-26 15:04:43,310] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/session_service.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.46s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.54s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.50s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.05it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.15s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.38s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.49s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.03it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+INFO:     Started server process [2558067]
+INFO:     Waiting for application startup.
+[2025-05-26 15:05:02,885] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.42s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.53s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.47s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.07it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.14s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.37s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.48s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.50s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.03it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.15s/it]
+INFO:     Started server process [2558278]
+INFO:     Waiting for application startup.
+[2025-05-26 15:05:52,978] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+[2025-05-26 15:07:51,850] [   ERROR] main.py:3404 - Redis 서버 정보 조회 중 오류: 'dict' object has no attribute 'split'
+[2025-05-26 15:08:24,469] [    INFO] main.py:2185 - Received chat request: '보안서약서 2조 알려줘', Category: '메뉴얼', History items: 1
+[2025-05-26 15:08:24,723] [    INFO] main.py:2213 - Initial document retrieval completed in 0.2433 seconds. Found 10 docs.
+[2025-05-26 15:08:24,727] [    INFO] main.py:2229 - Search enhancement completed in 0.0038 seconds.
+[2025-05-26 15:08:24,844] [    INFO] main.py:2238 - Document reranking completed in 0.1164 seconds. Reranked to 3 docs.
+[2025-05-26 15:08:24,844] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 15:08:24,852] [    INFO] main.py:2260 - Prompt generation completed in 0.0074 seconds.
+[2025-05-26 15:08:24,854] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 15:08:27,299] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 175. Time: 2.4446s
+[2025-05-26 15:08:27,299] [    INFO] main.py:2424 - 인용된 소스 수: 2/3
+[2025-05-26 15:08:27,300] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:76e31a641d37a7454492326e5cf630ea
+[2025-05-26 15:08:27,300] [    INFO] main.py:2473 - Total chat request processing time: 2.8313 seconds.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.42s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.52s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.48s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.06it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.14s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.37s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.49s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.52s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.02it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+INFO:     Started server process [2559609]
+INFO:     Waiting for application startup.
+[2025-05-26 15:09:23,465] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+[2025-05-26 15:09:36,917] [    INFO] main.py:2185 - Received chat request: '보안서약서 제1조 내용 알려줘', Category: '메뉴얼', History items: 1
+[2025-05-26 15:09:37,097] [    INFO] main.py:2213 - Initial document retrieval completed in 0.1712 seconds. Found 10 docs.
+[2025-05-26 15:09:37,098] [    INFO] main.py:2229 - Search enhancement completed in 0.0014 seconds.
+[2025-05-26 15:09:37,211] [    INFO] main.py:2238 - Document reranking completed in 0.1124 seconds. Reranked to 3 docs.
+[2025-05-26 15:09:37,211] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 15:09:37,218] [    INFO] main.py:2260 - Prompt generation completed in 0.0068 seconds.
+[2025-05-26 15:09:37,221] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 15:09:46,285] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 678. Time: 9.0639s
+[2025-05-26 15:09:46,285] [    INFO] main.py:2424 - 인용된 소스 수: 1/3
+[2025-05-26 15:09:46,286] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:45ce0542d703aa6cf58344901b8773f3
+[2025-05-26 15:09:46,286] [    INFO] main.py:2473 - Total chat request processing time: 9.3690 seconds.
+[2025-05-26 15:09:53,802] [    INFO] main.py:2185 - Received chat request: '보안서약서 제1조 내용 알려줘', Category: '메뉴얼', History items: 3
+[2025-05-26 15:09:53,839] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0285 seconds. Found 10 docs.
+[2025-05-26 15:09:53,840] [    INFO] main.py:2229 - Search enhancement completed in 0.0005 seconds.
+[2025-05-26 15:09:53,890] [    INFO] main.py:2238 - Document reranking completed in 0.0507 seconds. Reranked to 3 docs.
+[2025-05-26 15:09:53,890] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 15:09:53,891] [    INFO] main.py:2260 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 15:09:53,893] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 15:10:00,878] [ WARNING] main.py:2470 - LLM generation thread did not terminate gracefully.
+[2025-05-26 15:10:00,878] [    INFO] main.py:2473 - Total chat request processing time: 7.0765 seconds.
+[2025-05-26 15:10:00,879] [    INFO] main.py:2185 - Received chat request: '보안서약서 제1조 내용 알려줘', Category: '메뉴얼', History items: 5
+[2025-05-26 15:10:00,919] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0276 seconds. Found 10 docs.
+[2025-05-26 15:10:00,919] [    INFO] main.py:2229 - Search enhancement completed in 0.0004 seconds.
+[2025-05-26 15:10:00,976] [    INFO] main.py:2238 - Document reranking completed in 0.0564 seconds. Reranked to 3 docs.
+[2025-05-26 15:10:00,976] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 15:10:00,976] [    INFO] main.py:2260 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 15:10:00,978] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 15:10:12,066] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 678. Time: 11.0880s
+[2025-05-26 15:10:12,066] [    INFO] main.py:2424 - 인용된 소스 수: 1/3
+[2025-05-26 15:10:12,067] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:45ce0542d703aa6cf58344901b8773f3
+[2025-05-26 15:10:12,067] [    INFO] main.py:2473 - Total chat request processing time: 11.1880 seconds.
+[2025-05-26 15:12:56,558] [    INFO] main.py:2185 - Received chat request: '보안서약서 제2조 내용 알려줘', Category: '메뉴얼', History items: 7
+[2025-05-26 15:12:56,640] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0724 seconds. Found 10 docs.
+[2025-05-26 15:12:56,640] [    INFO] main.py:2229 - Search enhancement completed in 0.0006 seconds.
+[2025-05-26 15:12:56,691] [    INFO] main.py:2238 - Document reranking completed in 0.0502 seconds. Reranked to 3 docs.
+[2025-05-26 15:12:56,691] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 15:12:56,691] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 15:12:56,694] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 15:13:00,032] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 275. Time: 3.3379s
+[2025-05-26 15:13:00,032] [    INFO] main.py:2424 - 인용된 소스 수: 2/3
+[2025-05-26 15:13:00,032] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:008592994f23222e6635af3b973fb6ab
+[2025-05-26 15:13:00,033] [    INFO] main.py:2473 - Total chat request processing time: 3.4740 seconds.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.42s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:03,  1.51s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.45s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.08it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.12s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.36s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.48s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.50s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.03it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.15s/it]
+INFO:     Started server process [2562091]
+INFO:     Waiting for application startup.
+[2025-05-26 15:20:28,791] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.42s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.49s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.45s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.08it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.12s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.36s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.49s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.03it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+INFO:     Started server process [2565094]
+INFO:     Waiting for application startup.
+[2025-05-26 15:33:58,311] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+[2025-05-26 16:09:23,450] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:23,450] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:23,769] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:23,770] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:23,770] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:23,771] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:23,771] [    INFO] main.py:2185 - Received chat request: '보안서약서 2조 내용', Category: '메뉴얼', History items: 1
+[2025-05-26 16:09:24,033] [    INFO] main.py:2213 - Initial document retrieval completed in 0.2534 seconds. Found 10 docs.
+[2025-05-26 16:09:24,035] [    INFO] main.py:2229 - Search enhancement completed in 0.0014 seconds.
+[2025-05-26 16:09:24,154] [    INFO] main.py:2238 - Document reranking completed in 0.1185 seconds. Reranked to 3 docs.
+[2025-05-26 16:09:24,154] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 16:09:24,161] [    INFO] main.py:2260 - Prompt generation completed in 0.0068 seconds.
+[2025-05-26 16:09:24,163] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 16:09:24,613] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:24,614] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:24,614] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:24,676] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:24,676] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:24,677] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:24,738] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:24,738] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:24,738] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:24,759] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:24,759] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:24,760] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:24,800] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:24,801] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:24,801] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:24,822] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:24,822] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:24,822] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:24,884] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:24,884] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:24,884] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:24,946] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:24,946] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:24,946] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,008] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,008] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,009] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,050] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,050] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,050] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,071] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,071] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,072] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,112] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,113] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,113] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,194] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,195] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,195] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,236] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,236] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,236] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,277] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,277] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,278] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,318] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,319] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,319] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,340] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,340] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,340] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,381] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,381] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,382] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,443] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,443] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,443] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,484] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,484] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,485] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,586] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,586] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,587] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,668] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,668] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,669] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,730] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,730] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,730] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,771] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,771] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,772] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,813] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,813] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,813] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,854] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,854] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,855] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,916] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,916] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,917] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:25,958] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:25,958] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:25,959] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,000] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,000] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,000] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,041] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,041] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,042] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,083] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,083] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,084] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,145] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,145] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,145] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,166] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,166] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,167] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,228] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,228] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,228] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,289] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,289] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,290] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,351] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,351] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,352] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,372] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,372] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,373] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,434] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,434] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,435] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,435] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,435] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,436] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,497] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,497] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,498] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,539] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,539] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,539] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,681] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,682] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,682] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,703] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,703] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,703] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,744] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,744] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,745] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,786] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,786] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,786] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,827] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,827] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,828] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,830] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 175. Time: 2.6663s
+[2025-05-26 16:09:26,830] [    INFO] main.py:2424 - 인용된 소스 수: 2/3
+[2025-05-26 16:09:26,830] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:03e07749f7478e7e298457bc5366ffd1
+[2025-05-26 16:09:26,830] [    INFO] main.py:2473 - Total chat request processing time: 3.0588 seconds.
+[2025-05-26 16:09:26,866] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,866] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,867] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,867] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,867] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,868] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,868] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,868] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,868] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:26,869] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:26,869] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:26,869] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,111] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,111] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,112] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,112] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,112] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,113] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,113] [    INFO] main.py:2185 - Received chat request: '보안서약서 제1조 내용', Category: '메뉴얼', History items: 3
+[2025-05-26 16:09:33,151] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0286 seconds. Found 10 docs.
+[2025-05-26 16:09:33,152] [    INFO] main.py:2229 - Search enhancement completed in 0.0005 seconds.
+[2025-05-26 16:09:33,202] [    INFO] main.py:2238 - Document reranking completed in 0.0502 seconds. Reranked to 3 docs.
+[2025-05-26 16:09:33,202] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 16:09:33,202] [    INFO] main.py:2260 - Prompt generation completed in 0.0001 seconds.
+[2025-05-26 16:09:33,204] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 16:09:33,567] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,567] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,568] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,588] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,589] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,589] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,650] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,650] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,651] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,692] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,692] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,692] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,733] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,733] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,734] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,755] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,755] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,755] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,816] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:33,817] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:33,817] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:33,999] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,000] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,000] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,081] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,081] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,082] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,204] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,204] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,204] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,265] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,266] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,266] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,347] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,347] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,348] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,389] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,389] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,389] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,411] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,411] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,411] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,452] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,452] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,452] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,493] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,493] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,494] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,535] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,535] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,535] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,616] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,617] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,617] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,658] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,658] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,659] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,700] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,700] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,701] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,721] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,721] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,722] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,783] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,783] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,784] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,825] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,825] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,825] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,866] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,866] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,867] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,888] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,888] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,888] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,909] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,909] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,910] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:34,991] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:34,991] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:34,992] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,053] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,053] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,053] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,074] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,074] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,075] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,116] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,116] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,116] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,137] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,137] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,138] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,179] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,179] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,179] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,180] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,180] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,181] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,201] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,201] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,202] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,303] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,304] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,304] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,346] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,346] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,347] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,388] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,388] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,388] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,430] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,430] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,430] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,471] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,471] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,472] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,533] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,533] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,533] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,614] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,615] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,615] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,656] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,656] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,657] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,718] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,718] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,719] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,779] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,779] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,780] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,800] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,801] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,801] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,862] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,862] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,863] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,904] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,904] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,905] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:35,966] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:35,966] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:35,966] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,007] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,007] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,008] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,048] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,048] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,049] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,150] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,150] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,151] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,172] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,172] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,172] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,233] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,234] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,234] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,295] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,296] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,296] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,377] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,377] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,378] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,459] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,459] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,460] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,521] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,521] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,522] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,522] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,523] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,523] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,583] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,584] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,584] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,645] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,645] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,646] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,707] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,707] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,707] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,789] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,789] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,789] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,871] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,871] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,871] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:36,952] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:36,952] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:36,953] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,014] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,014] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,014] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,015] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,015] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,016] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,076] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,077] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,077] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,158] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,158] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,159] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,254] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,254] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,254] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,255] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,255] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,256] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,391] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,391] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,391] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,445] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,446] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,446] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,452] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,453] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,453] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,454] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,454] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,454] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,510] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,510] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,510] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,551] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,551] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,552] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,572] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,572] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,573] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,654] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,654] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,655] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,716] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,716] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,716] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,737] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,737] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,738] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,820] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,820] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,820] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,902] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,902] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,902] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,903] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,903] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,904] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:37,964] [    INFO] main.py:1166 - 대화 저장 성공 (파일): app/conversations/user1_1748243355281.json
+[2025-05-26 16:09:37,964] [    INFO] main.py:1176 - Redis에 대화 저장 시도: user_id=user1, conversation_id=1748243355281
+[2025-05-26 16:09:37,965] [    INFO] main.py:1180 - Redis에 대화 저장 성공: user1_1748243355281
+[2025-05-26 16:09:42,352] [    INFO] main.py:2473 - Total chat request processing time: 9.2385 seconds.
+WARNING:  WatchFiles detected changes in 'app/services/session_service.py'. Reloading...
+ERROR:    Error loading ASGI app. Could not import module "app.main".
+WARNING:  WatchFiles detected changes in 'app/main.py', 'app/services/session_service.py'. Reloading...
+ERROR:    Error loading ASGI app. Could not import module "app.main".
+WARNING:  WatchFiles detected changes in 'app/services/session_service.py'. Reloading...
+ERROR:    Error loading ASGI app. Could not import module "app.main".
+WARNING:  WatchFiles detected changes in 'app/services/session_service.py', 'app/main.py'. Reloading...
+ERROR:    Error loading ASGI app. Attribute "app" not found in module "app.main".
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.43s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.53s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.48s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.06it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.14s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.37s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.48s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.03it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+INFO:     Started server process [2583185]
+INFO:     Waiting for application startup.
+[2025-05-26 16:29:42,861] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.42s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.56s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.50s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.05it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.37s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.50s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.52s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.02it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.16s/it]
+INFO:     Started server process [2583458]
+INFO:     Waiting for application startup.
+[2025-05-26 16:30:28,812] [    INFO] main.py:1809 - Redis 세션 관리자 초기화 완료
+INFO:     Application startup complete.
+[2025-05-26 16:30:38,893] [    INFO] main.py:2185 - Received chat request: '보안서약서 제 2조 내용', Category: '메뉴얼', History items: 1
+[2025-05-26 16:30:39,076] [    INFO] main.py:2213 - Initial document retrieval completed in 0.1727 seconds. Found 10 docs.
+[2025-05-26 16:30:39,078] [    INFO] main.py:2229 - Search enhancement completed in 0.0019 seconds.
+[2025-05-26 16:30:39,195] [    INFO] main.py:2238 - Document reranking completed in 0.1167 seconds. Reranked to 3 docs.
+[2025-05-26 16:30:39,195] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 16:30:39,203] [    INFO] main.py:2260 - Prompt generation completed in 0.0077 seconds.
+[2025-05-26 16:30:39,206] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 16:30:41,659] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 175. Time: 2.4526s
+[2025-05-26 16:30:41,659] [    INFO] main.py:2424 - 인용된 소스 수: 2/3
+[2025-05-26 16:30:41,660] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:17acb7c62140656e34ea0156286063e5
+[2025-05-26 16:30:41,660] [    INFO] main.py:2473 - Total chat request processing time: 2.7663 seconds.
+[2025-05-26 16:30:50,853] [    INFO] main.py:2185 - Received chat request: '재택근무 할 때 지켜야할 정보보호 실천 수칙 전체 다말해줘', Category: '메뉴얼', History items: 3
+[2025-05-26 16:30:50,892] [    INFO] main.py:2213 - Initial document retrieval completed in 0.0285 seconds. Found 10 docs.
+[2025-05-26 16:30:50,893] [    INFO] main.py:2229 - Search enhancement completed in 0.0009 seconds.
+[2025-05-26 16:30:50,944] [    INFO] main.py:2238 - Document reranking completed in 0.0505 seconds. Reranked to 3 docs.
+[2025-05-26 16:30:50,944] [    INFO] main.py:2245 - Using top 3 docs for LLM context.
+[2025-05-26 16:30:50,944] [    INFO] main.py:2260 - Prompt generation completed in 0.0002 seconds.
+[2025-05-26 16:30:50,947] [    INFO] main.py:2302 - Starting LLM generation with params: temp=0.1, max_tokens=2048
+[2025-05-26 16:31:00,954] [    INFO] main.py:2420 - LLM generation stream finished. Total chars: 858. Time: 10.0072s
+[2025-05-26 16:31:00,954] [    INFO] main.py:2424 - 인용된 소스 수: 1/3
+[2025-05-26 16:31:00,954] [    INFO] main.py:2457 - 스트리밍 응답 캐싱 완료: chat:e7d014a30f06da958028b41df6cb364b
+[2025-05-26 16:31:00,954] [    INFO] main.py:2473 - Total chat request processing time: 10.1016 seconds.
+start.sh: line 4: 2474963 Killed                  uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 --log-level debug >> ./chatbot.log
+/root/.pyenv/versions/3.10.14/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 19 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

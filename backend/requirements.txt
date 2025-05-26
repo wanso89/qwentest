@@ -5,4 +5,11 @@ mysql-connector-python==8.0.33
 vanna>=0.7.9
 sqlalchemy>=2.0.0 
 # PyMySQL 패키지 추가 (Vanna에서 SQLAlchemy + MySQL 연결용)
-pymysql>=1.1.0 
+pymysql>=1.1.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+python-multipart>=0.0.6
+elasticsearch>=8.10.0
+redis>=4.6.0
+langchain>=0.0.292
+sentence-transformers>=2.2.2 

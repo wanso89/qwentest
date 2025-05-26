@@ -28,6 +28,9 @@ import re  # 정규식 사용을 위한 모듈
 from pathlib import Path  # 경로 처리용
 from fastapi import Request as FastAPIRequest # FastAPI의 Request를 명시적으로 임포트
 
+# Redis 세션 관리 서비스 import
+from app.services.session_service import get_redis_session_manager
+
 # 검색 개선 모듈 import
 from app.utils.search_enhancer import EnhancedSearchPipeline
 # 피드백 분석 모듈 import
@@ -916,10 +919,11 @@ async def search_and_combine(
         # LLM으로 답변 생성
         llm_start = time.time()
         answer = await generate_llm_response(
-            request,
+            None,  # request 매개변수에 None 전달 (나중에 Request 객체를 적절히 처리할 필요가 있음)
             tokenizer,
             query,
-            0.2,
+            final_docs,  # top_docs 대신 final_docs 사용
+            0.2,  # temperature 값
             conversation_history
         )
         
@@ -1144,10 +1148,11 @@ CONVERSATION_DIR = "app/conversations"
 os.makedirs(CONVERSATION_DIR, exist_ok=True)
 
 
-# 대화 저장 함수
+# 대화 저장 함수 - Redis 세션 관리 사용
 def save_conversation(
     user_id: str, conversation_id: str, messages: List[Dict[str, Any]]
 ):
+    # 기존 파일 기반 저장 유지
     try:
         file_path = os.path.join(CONVERSATION_DIR, f"{user_id}_{conversation_id}.json")
         conversation_data = {
@@ -1158,23 +1163,61 @@ def save_conversation(
         }
         with open(file_path, "w") as f:
             json.dump(conversation_data, f, indent=2, ensure_ascii=False)
-        return True
+        logger.info(f"대화 저장 성공 (파일): {file_path}")
     except Exception as e:
-        print(f"대화 저장 중 오류 발생: {e}")
-        return False
+        logger.warning(f"파일 시스템에 대화 저장 실패: {e}")
+    
+    # Redis 세션에 저장 시도
+    redis_manager = get_redis_session_manager()
+    if not redis_manager.is_connected():
+        logger.warning("Redis 연결 없음: 로컬 파일로만 저장됨")
+        return os.path.exists(file_path)
+        
+    logger.info(f"Redis에 대화 저장 시도: user_id={user_id}, conversation_id={conversation_id}")
+    redis_success = redis_manager.save_conversation(user_id, conversation_id, messages)
+    
+    if redis_success:
+        logger.info(f"Redis에 대화 저장 성공: {user_id}_{conversation_id}")
+    else:
+        logger.warning(f"Redis에 대화 저장 실패: {user_id}_{conversation_id}")
+    
+    # 최소한 하나의 방식으로 저장에 성공하면 True 반환
+    return redis_success or os.path.exists(file_path)
 
 
-# 대화 불러오기 함수
+# 대화 불러오기 함수 - Redis 우선, 실패 시 파일 시스템 사용
 def load_conversation(user_id: str, conversation_id: str):
+    logger.info(f"대화 불러오기 시도: user_id={user_id}, conversation_id={conversation_id}")
+    
+    # 먼저 Redis에서 시도
+    redis_manager = get_redis_session_manager()
+    if not redis_manager.is_connected():
+        logger.warning("Redis 연결 없음: 로컬 파일에서만 조회")
+    else:
+        conversation = redis_manager.load_conversation(user_id, conversation_id)
+        
+        # Redis에서 찾았으면 반환
+        if conversation:
+            logger.info(f"Redis에서 대화 불러오기 성공: {user_id}_{conversation_id}")
+            return conversation
+        else:
+            logger.warning(f"Redis에서 대화를 찾을 수 없음: {user_id}_{conversation_id}")
+    
+    # Redis에 없으면 파일 시스템에서 시도
     try:
         file_path = os.path.join(CONVERSATION_DIR, f"{user_id}_{conversation_id}.json")
         if os.path.exists(file_path):
             with open(file_path, "r") as f:
+                logger.info(f"파일 시스템에서 대화 불러오기 성공: {file_path}")
                 return json.load(f)
-        return None
+        else:
+            logger.warning(f"파일 시스템에서 대화를 찾을 수 없음: {file_path}")
     except Exception as e:
-        print(f"대화 불러오기 중 오류 발생: {e}")
-        return None
+        logger.warning(f"파일 시스템에서 대화 불러오기 실패: {e}")
+    
+    # 어디에도 없으면 None 반환
+    logger.error(f"대화를 찾을 수 없음 (Redis 및 파일 시스템): {user_id}_{conversation_id}")
+    return None
 
 
 # 대화 저장 엔드포인트
@@ -1756,6 +1799,14 @@ async def startup_event():
     # 모델 상태 확인
     app.state.llm_model = llm_model
     app.state.tokenizer = tokenizer
+    
+    # Redis 세션 관리자 초기화
+    redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+    redis_manager = get_redis_session_manager(redis_url)
+    if not redis_manager.is_connected():
+        logger.warning("Redis 서버에 연결할 수 없습니다. 로컬 파일 기반 저장소를 사용합니다.")
+    else:
+        logger.info("Redis 세션 관리자 초기화 완료")
 
 
 @app.get("/api/file-viewer/{filename}")
@@ -2164,8 +2215,10 @@ async def chat(fastapi_request: FastAPIRequest, request: QuestionRequest = Body(
         if not retrieved_docs_initial:
             logger.info("No relevant documents found for the query from initial retrieval.")
             async def empty_response_stream():
-                yield f"data: {json.dumps({'token': '관련 문서를 찾을 수 없습니다. 다른 질문을 시도해 주세요.'})}\n\n"
-                yield f"data: {json.dumps({'event': 'eos'})}\n\n"
+                token_data = {'token': '관련 문서를 찾을 수 없습니다. 다른 질문을 시도해 주세요.'}
+                yield f"data: {json.dumps(token_data)}\n\n"
+                event_data = {'event': 'eos'}
+                yield f"data: {json.dumps(event_data)}\n\n"
             return StreamingResponse(empty_response_stream(), media_type="text/event-stream", headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
         # 1b. EnhancedSearchPipeline을 사용하여 검색 결과 개선 (TypeError 수정)
@@ -3198,4 +3251,221 @@ def deduplicate_markdown_sections_py(markdown_text: str) -> str:
     # 연속 빈 줄 정리
     result = re.sub(r'\n{3,}', '\n\n', result)
     return result.strip()
+
+
+# 대화 삭제 함수 추가
+@app.delete("/api/conversations/delete")
+async def delete_conversation_endpoint(user_id: str, conversation_id: str):
+    try:
+        # 파일 시스템에서 삭제
+        file_path = os.path.join(CONVERSATION_DIR, f"{user_id}_{conversation_id}.json")
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        
+        # Redis에서도 삭제
+        redis_manager = get_redis_session_manager()
+        redis_manager.delete_conversation(user_id, conversation_id)
+        
+        return {"status": "success", "message": "대화가 삭제되었습니다."}
+    except Exception as e:
+        logger.error(f"대화 삭제 중 오류 발생: {e}")
+        raise HTTPException(status_code=500, detail=f"대화 삭제 중 오류 발생: {str(e)}")
+
+
+# 모든 대화 삭제 함수 추가
+@app.delete("/api/conversations/delete-all")
+async def delete_all_conversations_endpoint(user_id: str):
+    try:
+        # 파일 시스템에서 사용자의 모든 대화 파일 삭제
+        pattern = f"{user_id}_*.json"
+        for file_path in Path(CONVERSATION_DIR).glob(pattern):
+            os.remove(file_path)
+        
+        # Redis에서도 모든 대화 삭제
+        redis_manager = get_redis_session_manager()
+        redis_manager.clear_all_conversations(user_id)
+        
+        return {"status": "success", "message": "모든 대화가 삭제되었습니다."}
+    except Exception as e:
+        logger.error(f"모든 대화 삭제 중 오류 발생: {e}")
+        raise HTTPException(status_code=500, detail=f"모든 대화 삭제 중 오류 발생: {str(e)}")
+
+
+# 새로운 API 엔드포인트: 대화 목록 조회
+@app.get("/api/conversations/list")
+async def list_conversations_endpoint(user_id: str):
+    try:
+        conversations = []
+        
+        # Redis에서 대화 목록 조회
+        redis_manager = get_redis_session_manager()
+        conversation_ids = redis_manager.list_user_conversations(user_id)
+        
+        # Redis에 저장된 대화 목록이 있으면 해당 데이터 반환
+        if conversation_ids:
+            for conv_id in conversation_ids:
+                conv_data = redis_manager.load_conversation(user_id, conv_id)
+                if conv_data:
+                    conversations.append(conv_data)
+        
+        # Redis에 데이터가 없으면 파일 시스템에서 조회
+        if not conversations:
+            pattern = f"{user_id}_*.json"
+            for file_path in Path(CONVERSATION_DIR).glob(pattern):
+                try:
+                    with open(file_path, "r") as f:
+                        conv_data = json.load(f)
+                        conversations.append(conv_data)
+                except Exception as e:
+                    logger.warning(f"대화 파일 읽기 실패: {file_path}, 오류: {e}")
+        
+        return {"status": "success", "conversations": conversations}
+    except Exception as e:
+        logger.error(f"대화 목록 조회 중 오류 발생: {e}")
+        raise HTTPException(status_code=500, detail=f"대화 목록 조회 중 오류 발생: {str(e)}")
+
+
+# 서버 상태 확인 API 추가
+@app.get("/api/health-check")
+async def health_check():
+    """시스템 상태 확인 엔드포인트"""
+    # Redis 연결 상태 확인
+    redis_manager = get_redis_session_manager()
+    redis_connected = redis_manager.is_connected()
+    
+    # Elasticsearch 연결 상태 확인
+    es_connected = False
+    try:
+        if es_client:
+            es_connected = es_client.ping()
+    except:
+        pass
+    
+    # 파일 시스템 상태 확인
+    storage_ok = os.access(CONVERSATION_DIR, os.W_OK)
+    
+    # LLM 모델 상태 확인 (이미 로드되었는지)
+    llm_loaded = "llm_model" in globals() and globals()["llm_model"] is not None
+    
+    return {
+        "status": "ok",
+        "timestamp": datetime.now().isoformat(),
+        "version": "1.0.0",
+        "services": {
+            "redis": redis_connected,
+            "elasticsearch": es_connected,
+            "storage": storage_ok,
+            "llm": llm_loaded
+        }
+    }
+
+# Redis 디버깅 엔드포인트 추가
+@app.get("/api/debug/redis-status")
+async def debug_redis_status():
+    """Redis 연결 상태 및 통계 정보를 반환합니다."""
+    try:
+        redis_manager = get_redis_session_manager()
+        is_connected = redis_manager.is_connected()
+        
+        result = {
+            "status": "connected" if is_connected else "disconnected",
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        if is_connected:
+            # Redis 서버 정보 가져오기
+            try:
+                info = redis_manager.redis.info()
+                result["server_info"] = {
+                    "redis_version": info.get("redis_version"),
+                    "uptime_in_seconds": info.get("uptime_in_seconds"),
+                    "connected_clients": info.get("connected_clients"),
+                    "used_memory_human": info.get("used_memory_human"),
+                    "total_connections_received": info.get("total_connections_received"),
+                    "total_commands_processed": info.get("total_commands_processed")
+                }
+                
+                # 키 통계
+                db_keys = info.get("db0", "")
+                if db_keys:
+                    keys_count = db_keys.split(",")[0].split("=")[1]
+                    result["keys_count"] = int(keys_count)
+                else:
+                    result["keys_count"] = 0
+                
+                # 패턴별 키 개수
+                conversation_keys = len(redis_manager.redis.keys("conversation:*"))
+                user_keys = len(redis_manager.redis.keys("user_conversations:*"))
+                result["pattern_stats"] = {
+                    "conversation_keys": conversation_keys,
+                    "user_conversation_keys": user_keys
+                }
+            except Exception as e:
+                logger.error(f"Redis 서버 정보 조회 중 오류: {e}")
+                result["server_info_error"] = str(e)
+        
+        return result
+    except Exception as e:
+        logger.error(f"Redis 상태 확인 중 오류 발생: {e}")
+        return {"status": "error", "error": str(e)}
+
+# Redis 대화 목록 디버깅 엔드포인트 추가
+@app.get("/api/debug/redis-conversations")
+async def debug_redis_conversations(user_id: str = ""):
+    """Redis에 저장된 대화 목록 및 세부 정보를 반환합니다."""
+    try:
+        redis_manager = get_redis_session_manager()
+        
+        if not redis_manager.is_connected():
+            return {"status": "error", "message": "Redis 연결 없음"}
+        
+        result = {"status": "success", "timestamp": datetime.now().isoformat()}
+        
+        if user_id:
+            # 특정 사용자의 대화 목록
+            conversation_ids = redis_manager.list_user_conversations(user_id)
+            result["user_id"] = user_id
+            result["conversation_count"] = len(conversation_ids)
+            result["conversation_ids"] = conversation_ids
+            
+            # 각 대화의 기본 정보
+            conversations = []
+            for conv_id in conversation_ids:
+                try:
+                    data = redis_manager.load_conversation(user_id, conv_id)
+                    if data:
+                        # 메시지 내용은 용량 문제로 제외하고 메타데이터만 포함
+                        conversations.append({
+                            "id": conv_id,
+                            "timestamp": data.get("timestamp", ""),
+                            "message_count": len(data.get("messages", [])),
+                            "ttl": redis_manager.redis.ttl(f"conversation:{user_id}:{conv_id}")
+                        })
+                except Exception as e:
+                    logger.error(f"대화 정보 조회 중 오류: {e}")
+                    conversations.append({"id": conv_id, "error": str(e)})
+            
+            result["conversations"] = conversations
+        else:
+            # 모든 대화 키 패턴 검색
+            all_conversation_keys = redis_manager.redis.keys("conversation:*")
+            result["total_conversation_keys"] = len(all_conversation_keys)
+            
+            # 사용자별 그룹화 (최대 10명까지)
+            user_groups = {}
+            for key in all_conversation_keys[:30]:  # 최대 30개 키만 처리
+                parts = key.split(":")
+                if len(parts) >= 3:
+                    user = parts[1]
+                    conv_id = parts[2]
+                    if user not in user_groups:
+                        user_groups[user] = []
+                    user_groups[user].append(conv_id)
+            
+            result["user_groups"] = user_groups
+        
+        return result
+    except Exception as e:
+        logger.error(f"Redis 대화 목록 조회 중 오류: {e}")
+        return {"status": "error", "error": str(e)}
 
