@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, forwardRef, useImperativeHandle, useCallba
 import { FiLoader, FiSend, FiPaperclip, FiX, FiCheck, FiImage, FiMessageSquare, FiFile, FiUploadCloud, FiStopCircle, FiClock, FiList } from 'react-icons/fi';
 import FileUpload from './FileUpload';
 
-const ChatInput = forwardRef(({ onSend, disabled, onTyping, onUploadSuccess, isEmbedding, isStreaming, onStopGeneration }, ref) => {
+const ChatInput = forwardRef(({ onSend, disabled, onTyping, onUploadSuccess, isEmbedding, isStreaming, onStopGeneration, isResponding }, ref) => {
   const [message, setMessage] = useState('');
   const [showFileUploadModal, setShowFileUploadModal] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -203,7 +203,8 @@ const ChatInput = forwardRef(({ onSend, disabled, onTyping, onUploadSuccess, isE
   };
 
   const handleSend = () => {
-    if (!message.trim() || disabled || isEmbedding) return;
+    // 메시지가 비어있거나, 비활성화 상태거나, 임베딩 중이거나, 응답 중이면 전송 불가
+    if (!message.trim() || disabled || isEmbedding || isResponding) return;
     
     // 히스토리에 현재 메시지 추가 (중복 제거)
     const trimmedMessage = message.trim();
@@ -244,6 +245,10 @@ const ChatInput = forwardRef(({ onSend, disabled, onTyping, onUploadSuccess, isE
   };
 
   const handleFileButtonClick = () => {
+    // 응답 중이면 파일 업로드 비활성화
+    if (isResponding) {
+      return;
+    }
     setShowFileUploadModal(true);
   };
 
@@ -328,9 +333,9 @@ const ChatInput = forwardRef(({ onSend, disabled, onTyping, onUploadSuccess, isE
             onKeyDown={handleKeyDown}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            placeholder="메시지를 입력하세요..."
-            className="w-full px-4 py-3 max-h-[150px] bg-transparent border-0 resize-none focus:ring-0 focus:outline-none text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
-            disabled={disabled || isEmbedding}
+            placeholder={isResponding ? "응답 생성 중입니다. 잠시만 기다려주세요..." : "메시지를 입력하세요..."}
+            className={`w-full px-4 py-3 max-h-[150px] bg-transparent border-0 resize-none focus:ring-0 focus:outline-none text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 ${isResponding ? 'opacity-60 cursor-not-allowed' : ''}`}
+            disabled={disabled || isEmbedding || isResponding}
             rows={1}
             aria-label="메시지 입력"
           />
@@ -340,10 +345,15 @@ const ChatInput = forwardRef(({ onSend, disabled, onTyping, onUploadSuccess, isE
             {/* 히스토리 버튼 */}
             <button
               type="button"
-              onClick={toggleHistoryModal}
-              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+              onClick={isResponding ? undefined : toggleHistoryModal}
+              className={`p-2 rounded-full transition-colors ${
+                isResponding 
+                  ? "text-gray-400 dark:text-gray-600 cursor-not-allowed"
+                  : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              }`}
               aria-label="이전 대화 기록"
-              disabled={disabled || messageHistory.length === 0}
+              disabled={disabled || messageHistory.length === 0 || isResponding}
+              title={isResponding ? "응답 생성 중에는 사용할 수 없습니다" : "이전 대화 기록"}
             >
               <FiList size={18} />
             </button>
@@ -351,10 +361,15 @@ const ChatInput = forwardRef(({ onSend, disabled, onTyping, onUploadSuccess, isE
             {/* 파일 버튼 */}
             <button
               type="button"
-              onClick={handleFileButtonClick}
-              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+              onClick={isResponding ? undefined : handleFileButtonClick}
+              className={`p-2 rounded-full transition-colors ${
+                isResponding 
+                  ? "text-gray-400 dark:text-gray-600 cursor-not-allowed"
+                  : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              }`}
               aria-label="파일 첨부"
-              disabled={disabled || isEmbedding}
+              disabled={disabled || isEmbedding || isResponding}
+              title={isResponding ? "응답 생성 중에는 파일을 업로드할 수 없습니다" : "파일 첨부"}
             >
               <FiPaperclip size={18} />
             </button>
@@ -376,13 +391,16 @@ const ChatInput = forwardRef(({ onSend, disabled, onTyping, onUploadSuccess, isE
             <button
               type="button"
               onClick={handleSend}
-              disabled={disabled || (!message.trim() && files.length === 0)}
+              disabled={disabled || (!message.trim() && files.length === 0) || isResponding}
               className={`p-2 rounded-full ${
-                message.trim() || files.length > 0
-                  ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                isResponding
+                  ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-600 cursor-not-allowed'
+                  : message.trim() || files.length > 0
+                    ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
               } transition-colors`}
               aria-label="전송"
+              title={isResponding ? "응답 생성 중에는 메시지를 전송할 수 없습니다" : "메시지 전송"}
             >
               {disabled ? (
                 <FiLoader className="animate-spin" size={18} />

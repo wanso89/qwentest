@@ -795,7 +795,8 @@ function ChatContainer({
   currentMode, // 현재 모드 props 추가
   isStreaming,
   setIsStreaming,
-  onStopGeneration // 응답 중단 함수 추가
+  onStopGeneration, // 응답 중단 함수 추가
+  isResponding // LLM 응답 중 상태 추가
 }) {
   const containerRef = useRef(null);
   const chatInputRef = useRef(null);
@@ -1674,6 +1675,7 @@ function ChatContainer({
             isEmbedding={isEmbedding}
             isStreaming={isStreaming}
             onStopGeneration={stopResponseGeneration}
+            isResponding={isResponding}
           />
           
           {/* 로딩 상태 표시 */}

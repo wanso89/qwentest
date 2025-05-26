@@ -793,17 +793,54 @@ function App() {
     if (conversations.length > 0) {
       try {
         // 직렬화 전에 DOM 요소 참조를 제거하기 위해 순수 객체만 추출
+        // 순환 참조 문제 해결: content가 문자열이 아닌 경우 안전하게 변환
         const cleanConversations = conversations.map(conv => ({
           id: conv.id,
           title: conv.title,
           timestamp: conv.timestamp,
           pinned: !!conv.pinned,
-          messages: conv.messages.map(msg => ({
-            role: msg.role,
-            content: msg.content,
-            timestamp: msg.timestamp || Date.now(),
-            sources: Array.isArray(msg.sources) ? msg.sources : []
-          }))
+          messages: conv.messages.map(msg => {
+            // content가 문자열이 아닌 경우(React 요소 등) 안전하게 처리
+            let safeContent = msg.content;
+            if (typeof msg.content !== 'string') {
+              try {
+                // React 요소나 DOM 노드인 경우 텍스트 내용만 추출 시도
+                safeContent = msg.content?.textContent || 
+                             msg.content?.toString() || 
+                             '[표시할 수 없는 콘텐츠]';
+              } catch (e) {
+                safeContent = '[표시할 수 없는 콘텐츠]';
+              }
+            }
+            
+            // sources 배열 안전 처리
+            let safeSources = [];
+            if (Array.isArray(msg.sources)) {
+              safeSources = msg.sources.map(source => {
+                // 각 소스 객체에 대해 안전하게 처리
+                if (typeof source === 'object' && source !== null) {
+                  // 객체인 경우 안전한 속성만 추출
+                  const safeSource = {};
+                  // 일반적인 소스 속성들만 복사
+                  if (source.title) safeSource.title = String(source.title);
+                  if (source.url) safeSource.url = String(source.url);
+                  if (source.text) safeSource.text = String(source.text);
+                  if (source.file) safeSource.file = String(source.file);
+                  if (source.page) safeSource.page = Number(source.page);
+                  if (source.score) safeSource.score = Number(source.score);
+                  return safeSource;
+                }
+                return source; // 원시 타입이면 그대로 반환
+              }).filter(Boolean); // null/undefined 제거
+            }
+            
+            return {
+              role: msg.role,
+              content: safeContent,
+              timestamp: msg.timestamp || Date.now(),
+              sources: safeSources
+            };
+          })
         }));
         
         localStorage.setItem("conversations", JSON.stringify(cleanConversations));
@@ -860,13 +897,18 @@ function App() {
   };
 
   // 새 대화 생성
-  const handleNewConversation = (topic, category, forceFirst = false) => {
-    // 응답 중이면 새 대화 생성 차단
-    if (isResponding) {
+  const handleNewConversation = (topic, category, forceFirst = false, skipResponseCheck = false) => {
+    // 응답 중이면 새 대화 생성 차단 (skipResponseCheck가 true인 경우 검사 건너뛰기)
+    if (isResponding && !skipResponseCheck) {
       console.log("대화 응답 중에는 새 대화를 생성할 수 없습니다.");
       setResponseBlockedMessage(lockMessages.newConversation);
       setTimeout(() => setResponseBlockedMessage(null), 3000); // 3초 후 메시지 제거
-      return;
+      return null;
+    }
+    
+    // 이미 응답 중이면서 skipResponseCheck가 true인 경우, 현재 대화 ID 반환
+    if (isResponding && skipResponseCheck && activeConversationId) {
+      return activeConversationId;
     }
     
     try {
@@ -958,12 +1000,14 @@ function App() {
     // 이미 선택된 대화면 아무것도 하지 않음
     if (id === activeConversationId) return;
     
-    // 응답 중이면 대화 전환 차단
+    // 응답 중이면 대화 전환 차단 (더 강력하게 차단)
     if (isResponding) {
       console.log("대화 응답 중에는 대화를 전환할 수 없습니다.");
       setResponseBlockedMessage(lockMessages.conversationSwitch);
       setTimeout(() => setResponseBlockedMessage(null), 3000); // 3초 후 메시지 제거
-      return;
+      
+      // 이벤트 전파 중지 및 기본 동작 방지
+      return false;
     }
 
     // 대화 전환 처리
@@ -998,6 +1042,14 @@ function App() {
 
   // 대화 삭제
   const handleDeleteConversation = (id) => {
+    // 응답 중이면 대화 삭제 차단
+    if (isResponding) {
+      console.log("대화 응답 중에는 대화를 삭제할 수 없습니다.");
+      setResponseBlockedMessage("현재 대화 응답이 진행 중입니다. 완료 또는 중지 후 대화를 삭제할 수 있습니다.");
+      setTimeout(() => setResponseBlockedMessage(null), 3000); // 3초 후 메시지 제거
+      return;
+    }
+    
     // 확인 창 없이 바로 삭제 처리
     setConversations((prev) => {
       const updated = prev.filter((conv) => conv.id !== id);
@@ -1254,14 +1306,27 @@ function App() {
   // 제출 함수 수정 - 응답 상태 관리 추가
   const handleSubmit = async (input, selectedCategory) => {
     if (!input.trim()) return;
+    
+    // 이미 응답 중이면 중복 요청 방지
+    if (isResponding) {
+      console.log("이미 응답 중입니다. 중복 요청을 방지합니다.");
+      return;
+    }
 
-    // 응답 시작 - 잠금 활성화
+    // 응답 시작 - 잠금 활성화 (상태 변수 먼저 업데이트)
     setIsResponding(true);
     
-    // 채팅 모드가 아니면 새 대화 생성
+    // 채팅 모드가 아니면 새 대화 생성 (응답 검사 건너뛰기)
     let currentConversationId = activeConversationId;
     if (!activeConversationId) {
-      currentConversationId = handleNewConversation("", selectedCategory, true);
+      currentConversationId = handleNewConversation("", selectedCategory, true, true);
+    }
+    
+    // currentConversationId가 null이면 오류 발생
+    if (!currentConversationId) {
+      console.error("대화 ID를 생성할 수 없습니다.");
+      setIsResponding(false); // 잠금 해제
+      return;
     }
 
     // 사용자 메시지 추가
@@ -1771,6 +1836,7 @@ function App() {
           recentQueries={recentQueries || []}
           dbSchema={dbSchema || {}}
           dashboardStats={dashboardStats || {}}
+          isResponding={isResponding}
         />
         <div
           className="absolute top-0 -right-3 h-full w-3 cursor-ew-resize z-10"
@@ -1825,6 +1891,7 @@ function App() {
               isStreaming={isStreaming}
               setIsStreaming={setIsStreaming}
               onStopGeneration={handleStopGeneration}
+              isResponding={isResponding}
               key="chat-container-component"
             />
           </div>

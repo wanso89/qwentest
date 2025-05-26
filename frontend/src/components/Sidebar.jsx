@@ -113,7 +113,8 @@ function Sidebar({
   onDeleteAllConversations, // 전체 대화 삭제 추가
   recentQueries = [], // SQL 모드에서 사용할 최근 쿼리 목록
   dbSchema = {}, // SQL 모드에서 사용할 DB 스키마 정보
-  dashboardStats = {} // 대시보드 모드에서 사용할 통계 정보
+  dashboardStats = {}, // 대시보드 모드에서 사용할 통계 정보
+  isResponding = false // LLM 응답 중 상태 추가
 }) {
   const [editingId, setEditingId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
@@ -231,8 +232,25 @@ function Sidebar({
     return (
       <div className="mb-2 px-2">
         <button
-          className="w-full flex items-center gap-2 justify-start py-2.5 pl-3 pr-2 rounded-md hover:bg-gray-700/40 text-gray-300 transition-colors"
-          onClick={onNewConversation}
+          className={`w-full flex items-center gap-2 justify-start py-2.5 pl-3 pr-2 rounded-md ${
+            isResponding 
+              ? "bg-gray-800/40 text-gray-500 cursor-not-allowed"
+              : "hover:bg-gray-700/40 text-gray-300"
+          } transition-colors`}
+          onClick={(e) => {
+            if (isResponding) {
+              e.preventDefault();
+              e.stopPropagation();
+              // 응답 중 클릭 시 시각적 피드백 추가
+              const target = e.currentTarget;
+              target.classList.add('shake-animation');
+              setTimeout(() => target.classList.remove('shake-animation'), 500);
+              return false;
+            }
+            onNewConversation();
+          }}
+          disabled={isResponding}
+          title={isResponding ? "응답 생성 중에는 새 대화를 시작할 수 없습니다" : "새 대화 시작"}
         >
           <FiPlus className="flex-shrink-0" size={18} />
           <span className="truncate">새 대화</span>
@@ -241,11 +259,17 @@ function Sidebar({
         {/* 전체 대화 삭제 버튼 */}
         {conversations.length > 0 && (
           <button
-            className="mt-1 w-full flex items-center gap-2 justify-start py-2.5 pl-3 pr-2 rounded-md hover:bg-red-900/30 text-gray-300 transition-colors border border-transparent hover:border-red-800/30 group"
-            onClick={() => setShowDeleteAllModal(true)}
+            className={`mt-1 w-full flex items-center gap-2 justify-start py-2.5 pl-3 pr-2 rounded-md border border-transparent ${
+              isResponding
+                ? "bg-gray-800/40 text-gray-500 cursor-not-allowed"
+                : "hover:bg-red-900/30 text-gray-300 hover:border-red-800/30 group"
+            } transition-colors`}
+            onClick={isResponding ? undefined : () => setShowDeleteAllModal(true)}
+            disabled={isResponding}
+            title={isResponding ? "응답 생성 중에는 대화를 삭제할 수 없습니다" : "모든 대화 삭제"}
           >
-            <FiTrash className="flex-shrink-0 text-gray-400 group-hover:text-red-400 transition-colors" size={18} />
-            <span className="truncate group-hover:text-red-200 transition-colors">전체 대화 삭제</span>
+            <FiTrash className={`flex-shrink-0 ${isResponding ? "text-gray-500" : "text-gray-400 group-hover:text-red-400"} transition-colors`} size={18} />
+            <span className={`truncate ${isResponding ? "" : "group-hover:text-red-200"} transition-colors`}>전체 대화 삭제</span>
           </button>
         )}
       </div>
@@ -446,6 +470,7 @@ function Sidebar({
                       onDelete={() => onDeleteConversation(conv.id)}
                       onTogglePin={() => onTogglePinConversation(conv.id)}
                       animationDelay={0}
+                      isResponding={isResponding}
                     />
                   ))}
                 </div>
@@ -489,6 +514,7 @@ function Sidebar({
                     onDelete={() => onDeleteConversation(conv.id)}
                     onTogglePin={() => onTogglePinConversation(conv.id)}
                     animationDelay={0}
+                    isResponding={isResponding}
                   />
                 ))}
               </div>
@@ -507,8 +533,13 @@ function Sidebar({
           <div className="space-y-0.5">
             {/* 새 대화 버튼 - 카드형 디자인으로 변경 */}
             <div 
-              className="group flex items-center p-3 rounded-xl bg-gradient-to-br from-indigo-500/10 to-indigo-700/20 border border-indigo-500/25 hover:border-indigo-500/40 cursor-pointer transition-all duration-200"
-              onClick={onNewConversation}
+              className={`group flex items-center p-3 rounded-xl bg-gradient-to-br ${
+                isResponding 
+                  ? "from-gray-800/50 to-gray-800/30 border-gray-700/25 cursor-not-allowed" 
+                  : "from-indigo-500/10 to-indigo-700/20 border-indigo-500/25 hover:border-indigo-500/40 cursor-pointer"
+              } border transition-all duration-200`}
+              onClick={isResponding ? undefined : onNewConversation}
+              title={isResponding ? "응답 생성 중에는 새 대화를 시작할 수 없습니다" : "새 대화 시작"}
             >
               <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 shadow-md group-hover:shadow-indigo-500/20 group-hover:scale-105 transition-all duration-300">
                 <FiPlus className="text-white" size={18} />
@@ -522,8 +553,13 @@ function Sidebar({
             
             {/* 모든 대화 삭제 버튼 - 카드형 디자인으로 변경 */}
             <div 
-              className="group flex items-center p-3 mt-2 rounded-xl bg-gradient-to-br from-gray-800/50 to-gray-900/60 border border-gray-700/25 hover:border-red-500/20 cursor-pointer transition-all duration-200"
-              onClick={() => setShowDeleteAllModal(true)}
+              className={`group flex items-center p-3 mt-2 rounded-xl bg-gradient-to-br from-gray-800/50 to-gray-900/60 border ${
+                isResponding
+                  ? "border-gray-700/25 cursor-not-allowed"
+                  : "border-gray-700/25 hover:border-red-500/20 cursor-pointer"
+              } transition-all duration-200`}
+              onClick={isResponding ? undefined : () => setShowDeleteAllModal(true)}
+              title={isResponding ? "응답 생성 중에는 대화를 삭제할 수 없습니다" : "모든 대화 삭제"}
             >
               <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 border border-gray-700 group-hover:bg-red-500/10 group-hover:border-red-500/30 transition-all duration-300">
                 <FiTrash2 className="text-gray-400 group-hover:text-red-400 transition-colors" size={16} />
@@ -675,19 +711,13 @@ function Sidebar({
         </div>
       )}
       {/* 하단 정보 영역 */}
-      <div className="mt-auto border-t border-gray-800 p-3">
-        <div className="flex flex-col space-y-2">
-          <h3 className="text-xs font-medium text-gray-500 px-2 mb-1">ㅋㅋ테스트중</h3>
-          
-          
-        </div>
-      </div>
+     
     </div>
   );
 }
 
 // 대화 항목 컴포넌트 업데이트
-function ConversationItem({ conversation, isActive, onClick, onRename, onDelete, onTogglePin, animationDelay }) {
+function ConversationItem({ conversation, isActive, onClick, onRename, onDelete, onTogglePin, animationDelay, isResponding }) {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(typeof conversation.title === 'string' ? conversation.title : '');
   const [showMenu, setShowMenu] = useState(false);
@@ -780,12 +810,26 @@ function ConversationItem({ conversation, isActive, onClick, onRename, onDelete,
       ) : (
         // 일반 모드
         <div
-          className={`flex items-center px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-300 ${
+          className={`flex items-center px-3 py-2.5 rounded-xl transition-all duration-300 ${
             isActive 
               ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md' 
-              : 'hover:bg-gray-800/70 text-gray-300'
+              : isResponding
+                ? 'bg-gray-800/40 text-gray-500 cursor-not-allowed'
+                : 'hover:bg-gray-800/70 text-gray-300 cursor-pointer'
           }`}
-          onClick={onClick}
+          onClick={(e) => {
+            if (isResponding) {
+              e.preventDefault();
+              e.stopPropagation();
+              // 응답 중 클릭 시 시각적 피드백 추가
+              const target = e.currentTarget;
+              target.classList.add('shake-animation');
+              setTimeout(() => target.classList.remove('shake-animation'), 500);
+              return false;
+            }
+            onClick();
+          }}
+          title={isResponding ? "응답 생성 중에는 대화를 전환할 수 없습니다" : ""}
         >
           <div className="mr-2 text-sm">
             <FiMessageSquare size={16} className={isActive ? 'text-white' : 'text-indigo-400'} />
@@ -805,9 +849,14 @@ function ConversationItem({ conversation, isActive, onClick, onRename, onDelete,
           {/* 세로 점 메뉴 버튼 */}
           <div className="relative" ref={menuRef}>
             <button
-              onClick={toggleMenu}
-              className={`p-1 rounded-lg ${isActive ? 'text-white hover:bg-white/20' : 'text-gray-400 hover:bg-gray-700'} transition-colors`}
-              title="메뉴"
+              onClick={isResponding ? undefined : toggleMenu}
+              className={`p-1 rounded-lg ${
+                isActive 
+                  ? isResponding ? 'text-gray-300 cursor-not-allowed' : 'text-white hover:bg-white/20' 
+                  : isResponding ? 'text-gray-600 cursor-not-allowed' : 'text-gray-400 hover:bg-gray-700'
+              } transition-colors`}
+              title={isResponding ? "응답 생성 중에는 메뉴를 사용할 수 없습니다" : "메뉴"}
+              disabled={isResponding}
             >
               <FiMoreVertical size={16} />
             </button>
