@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/typography": "^0.5.16",
     "d3": "^7.9.0",
     "daisyui": "^5.0.38"

@@ -130,6 +130,7 @@ export default {
       },
       fontFamily: {
         sans: [
+          'Inter', // Added Inter as the primary sans-serif font
           'Pretendard',
           'Noto Sans KR',
           'system-ui',
@@ -378,7 +379,50 @@ export default {
     require('daisyui'),
   ],
   daisyui: {
-    themes: ["corporate", "night"],
+    themes: [
+      {
+        "corporate": {
+          ...require("daisyui/src/theming/themes")["corporate"],
+          "primary": "#0075FF",        // Vibrant Blue
+          "secondary": "#E91E63",      // Vibrant Pink/Magenta
+          "accent": "#20C997",         // Teal/Green Accent
+          "neutral": "#D2D6E0",        // Light gray for borders
+          "base-100": "#F4F7FE",       // Very light blueish gray (main background)
+          "base-200": "#FFFFFF",       // White (cards/components)
+          "base-300": "#E9ECEF",       // Slightly darker light gray
+          "base-content": "#1A2035",   // Dark blue/purple text
+
+          "info": "#00B8D9",
+          "success": "#28A745",
+          "warning": "#FFC107",
+          "error": "#DC3545",
+
+          "--rounded-box": "0.5rem", // Slightly less rounded for a more "corporate" feel
+          "--rounded-btn": "0.25rem",
+        },
+      },
+      {
+        "night": {
+          ...require("daisyui/src/theming/themes")["night"],
+          "primary": "#0075FF",        // Vibrant Blue
+          "secondary": "#E91E63",      // Vibrant Pink/Magenta
+          "accent": "#20C997",         // Teal/Green Accent
+          "neutral": "#2A3045",        // Darker blue/purple (borders, subtle backgrounds)
+          "base-100": "#10152B",       // Very dark deep blue/purple (main background)
+          "base-200": "#1A2035",       // Dark blue/purple (cards/components)
+          "base-300": "#2A3045",       // Can be same as neutral or slightly different
+          "base-content": "#FFFFFF",   // White text
+
+          "info": "#00B8D9",
+          "success": "#28A745",
+          "warning": "#FFC107",
+          "error": "#DC3545",
+
+          "--rounded-box": "0.5rem",
+          "--rounded-btn": "0.25rem",
+        },
+      },
+    ],
   },
 }
 
