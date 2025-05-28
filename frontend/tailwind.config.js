@@ -380,49 +380,60 @@ export default {
   ],
   daisyui: {
     themes: [
+      "light", // Including default light theme
+      "dark",  // Including default dark theme
       {
-        "corporate": {
-          ...require("daisyui/src/theming/themes")["corporate"],
-          "primary": "#0075FF",        // Vibrant Blue
-          "secondary": "#E91E63",      // Vibrant Pink/Magenta
-          "accent": "#20C997",         // Teal/Green Accent
-          "neutral": "#D2D6E0",        // Light gray for borders
-          "base-100": "#F4F7FE",       // Very light blueish gray (main background)
-          "base-200": "#FFFFFF",       // White (cards/components)
-          "base-300": "#E9ECEF",       // Slightly darker light gray
-          "base-content": "#1A2035",   // Dark blue/purple text
-
+        "corporate": { // Custom corporate theme (Vision UI Light)
+          "primary": "#0075FF",
+          "secondary": "#E91E63",
+          "accent": "#20C997",
+          "neutral": "#D2D6E0",
+          "base-100": "#F4F7FE",
+          "base-200": "#FFFFFF",
+          "base-300": "#E9ECEF",
+          "base-content": "#1A2035",
           "info": "#00B8D9",
           "success": "#28A745",
           "warning": "#FFC107",
           "error": "#DC3545",
-
-          "--rounded-box": "0.5rem", // Slightly less rounded for a more "corporate" feel
+          "--rounded-box": "0.5rem",
           "--rounded-btn": "0.25rem",
+           // Ensuring primary-content contrasts with primary
+          "primary-content": "#FFFFFF", 
+           // Ensuring secondary-content contrasts with secondary
+          "secondary-content": "#FFFFFF",
+           // Ensuring accent-content contrasts with accent
+          "accent-content": "#FFFFFF", 
         },
       },
       {
-        "night": {
-          ...require("daisyui/src/theming/themes")["night"],
-          "primary": "#0075FF",        // Vibrant Blue
-          "secondary": "#E91E63",      // Vibrant Pink/Magenta
-          "accent": "#20C997",         // Teal/Green Accent
-          "neutral": "#2A3045",        // Darker blue/purple (borders, subtle backgrounds)
-          "base-100": "#10152B",       // Very dark deep blue/purple (main background)
-          "base-200": "#1A2035",       // Dark blue/purple (cards/components)
-          "base-300": "#2A3045",       // Can be same as neutral or slightly different
-          "base-content": "#FFFFFF",   // White text
-
+        "night": { // Custom night theme (Vision UI Dark)
+          "primary": "#0075FF",
+          "secondary": "#E91E63",
+          "accent": "#20C997",
+          "neutral": "#2A3045", // Used for some borders and subtle backgrounds
+          "base-100": "#10152B", // Main background
+          "base-200": "#1A2035", // Card backgrounds, slightly lighter
+          "base-300": "#252B40", // Hover states, slightly lighter than base-200
+          "base-content": "#A6ADBB", // Softer text color
           "info": "#00B8D9",
           "success": "#28A745",
           "warning": "#FFC107",
           "error": "#DC3545",
-
           "--rounded-box": "0.5rem",
           "--rounded-btn": "0.25rem",
+           // Ensuring primary-content contrasts with primary
+          "primary-content": "#FFFFFF",
+           // Ensuring secondary-content contrasts with secondary
+          "secondary-content": "#FFFFFF",
+           // Ensuring accent-content contrasts with accent
+          "accent-content": "#FFFFFF", 
         },
       },
     ],
+    // Optional: set default themes if you don't want to rely on system preference or manual toggling
+    // defaultTheme: "corporate", 
+    // darkTheme: "night", // This would make 'night' the default dark theme if darkMode is 'class'
   },
 }
 
